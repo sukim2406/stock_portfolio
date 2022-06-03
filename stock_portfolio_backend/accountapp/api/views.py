@@ -21,10 +21,13 @@ def registration_view(request):
             data['username'] = account.username
             token = Token.objects.get(user=account).key
             data['token'] = token
+
+            return Response(status=status.HTTP_200_OK, data=data)
         else:
             data = serializer.errors
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=data)
         
-        return Response(data)
+        # return Response(data)
 
 
 @api_view(['POST',])
