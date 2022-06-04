@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../controllers/global_controllers.dart' as global;
+
 import '../widgets/side_bar.dart';
 
 import '../pages/landing_subpages/logout.dart';
+import '../pages/landing_subpages/dashboard.dart';
 
 class LandingPage extends StatefulWidget {
   final VoidCallback updateCurUser;
@@ -27,13 +30,14 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      const Text('home'),
+      const DashboardPage(),
       const Text('hi'),
       const Text('bye'),
       LogoutPage(updateCurUser: widget.updateCurUser),
     ];
     return Scaffold(
-      body: SizedBox(
+      body: Container(
+        color: global.baseColor,
         child: Row(
           children: [
             SideBarWidget(index: _curIndex, updatePage: updatePage),

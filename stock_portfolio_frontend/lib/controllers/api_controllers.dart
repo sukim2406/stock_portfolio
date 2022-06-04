@@ -76,4 +76,19 @@ class ApiControllers extends GetxController {
     }
     return false;
   }
+
+  getAlpacaAccount() async {
+    String token = await SFControllers.instance.getToken();
+    var response = await http.get(
+      Uri.parse(
+        UrlControllers.instance.getAlpacaAccountUrl(),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+    );
+    var jsonResponse = json.decode(response.body);
+
+    return jsonResponse;
+  }
 }

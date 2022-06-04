@@ -34,4 +34,9 @@ class UrlControllers extends GetxController {
     String accountDeleteUrl = '$baseUrl/api/account/delete/';
     return accountDeleteUrl;
   }
+
+  getAlpacaAccountUrl() {
+    String alpacaUrl = '$baseUrl/api/account/alpaca/';
+    return alpacaUrl;
+  }
 }

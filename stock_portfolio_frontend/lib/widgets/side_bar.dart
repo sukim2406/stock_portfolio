@@ -18,7 +18,19 @@ class SideBarWidget extends StatelessWidget {
     return Container(
       height: global.getHeight(context),
       width: global.getWidth(context) * .1,
-      color: Colors.greenAccent,
+      decoration: BoxDecoration(
+        color: global.accentColor,
+        border: Border.all(
+          color: global.accentColor,
+          width: 5,
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(
+            20,
+          ),
+        ),
+      ),
+      // color: Colors.greenAccent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

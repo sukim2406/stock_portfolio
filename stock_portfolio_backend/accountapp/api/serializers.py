@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from accountapp.models import Account
+from django.contrib.auth.hashers import make_password
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -8,7 +9,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = Account
         fields = ['email', 'username', 'password', 'password2', 'alpaca_api_key', 'alpaca_secret_key']
         extra_kwargs = {
-            'password': {'write_only':True}
+            'password': {'write_only':True},
         }
     
     def save(self):
@@ -23,7 +24,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         if password != password2:
             raise serializers.ValidationError({'password': 'Passwords must match'})
-        
         account.set_password(password)
         account.save()
         

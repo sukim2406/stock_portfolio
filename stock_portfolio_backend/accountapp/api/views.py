@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from accountapp.models import Account
+import requests, json
 
 @api_view(['POST',])
 @permission_classes((AllowAny, ))
@@ -96,4 +97,21 @@ def account_delete_view(request):
         else:
             data["failure"] = "delete unsuccessful"
         
+        return Response(data=data)
+
+
+@api_view(['GET',])
+@permission_classes((IsAuthenticated, ))
+def alpaca_account_view(request):
+    try:
+        account = request.user
+    except Account.DoesNotExist:
+        return Response(status = status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serializer = AccountPropertiesSerializer(account)
+        base_url = "https://api.alpaca.markets"
+        account_url = "{}/v2/account".format(base_url)
+        r = requests.get(account_url, headers={'APCA-API-KEY-ID': serializer.data['alpaca_api_key'], 'APCA-API-SECRET-KEY': serializer.data['alpaca_secret_key']})
+        data = json.loads(r.content)
         return Response(data=data)
