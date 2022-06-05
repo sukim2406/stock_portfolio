@@ -12,6 +12,22 @@ class TotalSummeryWidget extends StatelessWidget {
     required this.alpacaPositions,
   }) : super(key: key);
 
+  double getTotalCost() {
+    double totalCost = 0;
+    for (Map ticker in alpacaPositions) {
+      totalCost += double.parse(ticker['cost_basis']);
+    }
+    return totalCost;
+  }
+
+  double getMarketValue() {
+    double marketValue = 0;
+    for (Map ticker in alpacaPositions) {
+      marketValue += double.parse(ticker['market_value']);
+    }
+    return marketValue;
+  }
+
   @override
   Widget build(BuildContext context) {
     return CardWidget(
@@ -24,6 +40,8 @@ class TotalSummeryWidget extends StatelessWidget {
             SummeryTileWidget(
               title: 'Alpaca - default : Click to expand',
               positions: alpacaPositions,
+              totalCost: getTotalCost(),
+              marketValue: getMarketValue(),
             ),
           ],
         ),

@@ -9,10 +9,14 @@ import '../widgets/summery_ticker_tile.dart';
 class SummeryTileWidget extends StatefulWidget {
   final String title;
   final List positions;
+  final double totalCost;
+  final double marketValue;
   const SummeryTileWidget({
     Key? key,
     required this.title,
     required this.positions,
+    required this.totalCost,
+    required this.marketValue,
   }) : super(key: key);
 
   @override
@@ -20,16 +24,10 @@ class SummeryTileWidget extends StatefulWidget {
 }
 
 class _SummeryTileWidgetState extends State<SummeryTileWidget> {
-  double _totalCost = 0;
-  double _marketValue = 0;
   bool _expanded = true;
 
   @override
   Widget build(BuildContext context) {
-    for (Map ticker in widget.positions) {
-      _totalCost += double.parse(ticker['cost_basis']);
-      _marketValue += double.parse(ticker['market_value']);
-    }
     return Container(
       padding: const EdgeInsets.only(
         top: 5,
@@ -90,7 +88,7 @@ class _SummeryTileWidgetState extends State<SummeryTileWidget> {
                     text: 'Total Cost : ',
                     children: [
                       TextSpan(
-                        text: _totalCost.toStringAsFixed(2),
+                        text: widget.totalCost.toStringAsFixed(2),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -104,7 +102,7 @@ class _SummeryTileWidgetState extends State<SummeryTileWidget> {
                     text: 'Market Value : ',
                     children: [
                       TextSpan(
-                        text: _marketValue.toStringAsFixed(2),
+                        text: widget.marketValue.toStringAsFixed(2),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -118,10 +116,11 @@ class _SummeryTileWidgetState extends State<SummeryTileWidget> {
                     text: 'Total P/L : ',
                     children: [
                       TextSpan(
-                        text: (_marketValue - _totalCost).toStringAsFixed(2),
+                        text: (widget.marketValue - widget.totalCost)
+                            .toStringAsFixed(2),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: ((_marketValue - _totalCost) > 0)
+                          color: ((widget.marketValue - widget.totalCost) > 0)
                               ? Colors.greenAccent
                               : Colors.redAccent,
                         ),
