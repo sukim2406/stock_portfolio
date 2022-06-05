@@ -51,7 +51,8 @@ class ApiControllers extends GetxController {
     return false;
   }
 
-  register(email, username, password, password2, apiKey, secretKey) async {
+  register(
+      email, username, password, password2, apiKey, secretKey, paper) async {
     Map data = {
       'email': email,
       'username': username,
@@ -59,6 +60,7 @@ class ApiControllers extends GetxController {
       'password2': password2,
       'alpaca_api_key': apiKey,
       'alpaca_secret_key': secretKey,
+      'paper_account': paper,
     };
 
     var response = await http.post(
@@ -87,6 +89,22 @@ class ApiControllers extends GetxController {
         HttpHeaders.authorizationHeader: 'Token $token',
       },
     );
+    var jsonResponse = json.decode(response.body);
+
+    return jsonResponse;
+  }
+
+  getAlpacaPositions() async {
+    String token = await SFControllers.instance.getToken();
+    var response = await http.get(
+      Uri.parse(
+        UrlControllers.instance.getAlpacaPositionUrl(),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+    );
+
     var jsonResponse = json.decode(response.body);
 
     return jsonResponse;

@@ -20,3 +20,7 @@ printErrorBar(context, text) {
 Color accentColor = Colors.greenAccent;
 Color baseColor = Colors.black87;
 Color backgroundColor = Colors.black;
+
+double getSummeryWidth(context) {
+  return getWidth(context) * .44;
+}

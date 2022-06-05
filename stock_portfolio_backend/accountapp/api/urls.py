@@ -1,6 +1,6 @@
 from distutils.log import Log
 from django.urls import path
-from accountapp.api.views import registration_view, logout_view, Login, account_detail_view, account_update_view, account_delete_view, alpaca_account_view
+from accountapp.api.views import registration_view, logout_view, Login, account_detail_view, account_update_view, account_delete_view, alpaca_account_view, alpaca_get_positions_view
 
 app_name = "accountapp"
 
@@ -12,4 +12,5 @@ urlpatterns = [
     path('update/', account_update_view, name="update"),
     path('delete/', account_delete_view, name="delete"),
     path('alpaca/', alpaca_account_view, name="alpacaAccount"),
+    path('alpaca-positions/', alpaca_get_positions_view, name="alpacaPositions"),
 ]

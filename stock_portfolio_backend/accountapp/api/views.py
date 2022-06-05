@@ -110,8 +110,37 @@ def alpaca_account_view(request):
     
     if request.method == 'GET':
         serializer = AccountPropertiesSerializer(account)
-        base_url = "https://api.alpaca.markets"
+        live_url = "https://api.alpaca.markets"
+        paper_url = "https://paper-api.alpaca.markets"
+        base_url = ""
+        if(serializer.data['paper_account']):
+            base_url = paper_url
+        else:
+            base_url = live_url
         account_url = "{}/v2/account".format(base_url)
         r = requests.get(account_url, headers={'APCA-API-KEY-ID': serializer.data['alpaca_api_key'], 'APCA-API-SECRET-KEY': serializer.data['alpaca_secret_key']})
+        data = json.loads(r.content)
+        return Response(data=data)
+
+
+@api_view(['GET',])
+@permission_classes((IsAuthenticated, ))
+def alpaca_get_positions_view(request):
+    try:
+        account = request.user
+    except Account.DoesNotExist:
+        return Response(status = status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = AccountPropertiesSerializer(account)
+        live_url = "https://api.alpaca.markets"
+        paper_url = "https://paper-api.alpaca.markets"
+        base_url = ""
+        if(serializer.data['paper_account']):
+            base_url = paper_url
+        else:
+            base_url = live_url
+        positions_url = "{}/v2/positions".format(base_url)
+        r = requests.get(positions_url, headers={'APCA-API-KEY-ID': serializer.data['alpaca_api_key'], 'APCA-API-SECRET-KEY': serializer.data['alpaca_secret_key']})
         data = json.loads(r.content)
         return Response(data=data)

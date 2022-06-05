@@ -18,6 +18,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  bool _paperTrade = false;
+
   @override
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
@@ -26,7 +28,6 @@ class _RegisterPageState extends State<RegisterPage> {
     TextEditingController usernameController = TextEditingController();
     TextEditingController apiKeyController = TextEditingController();
     TextEditingController secretKeyController = TextEditingController();
-
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
@@ -104,6 +105,23 @@ class _RegisterPageState extends State<RegisterPage> {
                       enabled: true,
                     ),
                     SizedBox(
+                      width: global.getWidth(context) * .3,
+                      child: CheckboxListTile(
+                        title: const Text(
+                          'Paper Traing?',
+                          style: TextStyle(
+                            color: Colors.black54,
+                          ),
+                        ),
+                        value: _paperTrade,
+                        onChanged: (value) {
+                          setState(() {
+                            _paperTrade = value!;
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
                       height: global.getHeight(context) * .06,
                     ),
                     RoundedBtnWidget(
@@ -126,6 +144,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               password2Controller.text,
                               apiKeyController.text,
                               secretKeyController.text,
+                              _paperTrade,
                             )
                                 .then(
                               (result) {

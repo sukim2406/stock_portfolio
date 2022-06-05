@@ -7,7 +7,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['email', 'username', 'password', 'password2', 'alpaca_api_key', 'alpaca_secret_key']
+        fields = ['email', 'username', 'password', 'password2', 'alpaca_api_key', 'alpaca_secret_key', 'paper_account']
         extra_kwargs = {
             'password': {'write_only':True},
         }
@@ -18,6 +18,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             username = self.validated_data['username'],
             alpaca_api_key = self.validated_data['alpaca_api_key'],
             alpaca_secret_key = self.validated_data['alpaca_secret_key'],
+            paper_account = self.validated_data['paper_account']
         )
         password = self.validated_data['password']
         password2 = self.validated_data['password2']
@@ -33,7 +34,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 class AccountPropertiesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['pk', 'email', 'username', 'alpaca_api_key', 'alpaca_secret_key']
+        fields = ['pk', 'email', 'username', 'alpaca_api_key', 'alpaca_secret_key', 'paper_account']
         
 
 class AccountUpdateSerializer(serializers.ModelSerializer):

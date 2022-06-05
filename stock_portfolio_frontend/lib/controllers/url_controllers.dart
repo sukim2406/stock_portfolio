@@ -39,4 +39,9 @@ class UrlControllers extends GetxController {
     String alpacaUrl = '$baseUrl/api/account/alpaca/';
     return alpacaUrl;
   }
+
+  getAlpacaPositionUrl() {
+    String alpacaPositionUrl = '$baseUrl/api/account/alpaca-positions/';
+    return alpacaPositionUrl;
+  }
 }
