@@ -51,8 +51,7 @@ class SummeryTickerTileWidget extends StatelessWidget {
                     TextSpan(
                         text: pl.toStringAsFixed(2),
                         style: TextStyle(
-                          color:
-                              (pl > 0) ? Colors.greenAccent : Colors.redAccent,
+                          color: global.plColor(pl),
                         ))
                   ],
                 ),
@@ -69,7 +68,7 @@ class SummeryTickerTileWidget extends StatelessWidget {
                           ? '${((plpc - 1) * 100).toStringAsFixed(2)}%'
                           : '${(plpc * 100).toStringAsFixed(2)}%',
                       style: TextStyle(
-                        color: (pl > 0) ? Colors.greenAccent : Colors.redAccent,
+                        color: global.plColor(plpc),
                       ),
                     )
                   ],

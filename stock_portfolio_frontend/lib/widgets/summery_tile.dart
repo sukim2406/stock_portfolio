@@ -7,16 +7,10 @@ import '../controllers/global_controllers.dart' as global;
 import '../widgets/summery_ticker_tile.dart';
 
 class SummeryTileWidget extends StatefulWidget {
-  final String title;
-  final List positions;
-  final double totalCost;
-  final double marketValue;
+  final Map accountData;
   const SummeryTileWidget({
     Key? key,
-    required this.title,
-    required this.positions,
-    required this.totalCost,
-    required this.marketValue,
+    required this.accountData,
   }) : super(key: key);
 
   @override
@@ -50,7 +44,7 @@ class _SummeryTileWidgetState extends State<SummeryTileWidget> {
               alignment: Alignment.centerLeft,
               color: Colors.grey,
               child: Text(
-                widget.title,
+                widget.accountData['title'],
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -63,15 +57,17 @@ class _SummeryTileWidgetState extends State<SummeryTileWidget> {
                   width: global.getSummeryWidth(context),
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: widget.positions.length,
+                    itemCount: widget.accountData['positions'].length,
                     itemBuilder: (BuildContext context, int index) {
                       return SummeryTickerTileWidget(
-                        ticker: widget.positions[index]['symbol'],
-                        pl: double.parse(
-                            widget.positions[index]['unrealized_pl']),
-                        plpc: double.parse(
-                            widget.positions[index]['unrealized_plpc']),
-                        qty: int.parse(widget.positions[index]['qty']),
+                        ticker: widget.accountData['positions'][index]
+                            ['symbol'],
+                        pl: double.parse(widget.accountData['positions'][index]
+                            ['unrealized_pl']),
+                        plpc: double.parse(widget.accountData['positions']
+                            [index]['unrealized_plpc']),
+                        qty: int.parse(
+                            widget.accountData['positions'][index]['qty']),
                       );
                     },
                   ),
@@ -83,50 +79,91 @@ class _SummeryTileWidgetState extends State<SummeryTileWidget> {
             color: Colors.grey,
             child: Column(
               children: [
-                RichText(
-                  text: TextSpan(
-                    text: 'Total Cost : ',
-                    children: [
-                      TextSpan(
-                        text: widget.totalCost.toStringAsFixed(2),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: global.getSummeryWidth(context) / 2,
+                      child: RichText(
+                        textAlign: TextAlign.end,
+                        text: TextSpan(
+                          text: 'Account Cash : ',
+                          children: [
+                            TextSpan(
+                              text: widget.accountData['cash'],
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      width: global.getSummeryWidth(context) / 2,
+                      child: RichText(
+                        textAlign: TextAlign.end,
+                        text: TextSpan(
+                          text: 'Account P/L : ',
+                          children: [
+                            TextSpan(
+                              text: (widget.accountData['value'] -
+                                      widget.accountData['cost'])
+                                  .toStringAsFixed(2),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: global.plColor(
+                                    widget.accountData['value'] -
+                                        widget.accountData['cost']),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                RichText(
-                  text: TextSpan(
-                    text: 'Market Value : ',
-                    children: [
-                      TextSpan(
-                        text: widget.marketValue.toStringAsFixed(2),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: global.getSummeryWidth(context) / 2,
+                      child: RichText(
+                        textAlign: TextAlign.end,
+                        text: TextSpan(
+                          text: 'Account Cost : ',
+                          children: [
+                            TextSpan(
+                              text:
+                                  widget.accountData['cost'].toStringAsFixed(2),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                RichText(
-                  text: TextSpan(
-                    text: 'Total P/L : ',
-                    children: [
-                      TextSpan(
-                        text: (widget.marketValue - widget.totalCost)
-                            .toStringAsFixed(2),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: ((widget.marketValue - widget.totalCost) > 0)
-                              ? Colors.greenAccent
-                              : Colors.redAccent,
+                    ),
+                    SizedBox(
+                      width: global.getSummeryWidth(context) / 2,
+                      child: RichText(
+                        textAlign: TextAlign.end,
+                        text: TextSpan(
+                          text: 'Account Value : ',
+                          children: [
+                            TextSpan(
+                              text: widget.accountData['value']
+                                  .toStringAsFixed(2),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),

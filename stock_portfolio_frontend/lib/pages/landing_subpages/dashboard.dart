@@ -5,6 +5,7 @@ import '../../controllers/api_controllers.dart';
 
 import '../../widgets/alpaca_summery.dart';
 import '../../widgets/total_summery.dart';
+import '../../widgets/quick_add.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -15,7 +16,8 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   Map _alpacaAccount = {};
-  List _alpacaPositions = [];
+  List _accounts = [];
+  Map _defaultAccount = {};
 
   void sortPositions(rawData) {
     List alpacaPositions = [];
@@ -30,7 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
       alpacaPositions.add(sortedMap);
     }
     setState(() {
-      _alpacaPositions = alpacaPositions;
+      _defaultAccount['positions'] = alpacaPositions;
     });
   }
 
@@ -42,6 +44,8 @@ class _DashboardPageState extends State<DashboardPage> {
         setState(
           () {
             _alpacaAccount = result;
+            _defaultAccount['cash'] = result['cash'];
+            _defaultAccount['title'] = 'Alpaca - default : Click to expand';
           },
         );
       },
@@ -51,6 +55,11 @@ class _DashboardPageState extends State<DashboardPage> {
         sortPositions(result);
       },
     );
+    setState(() {
+      _accounts.add(_defaultAccount);
+      _accounts.add(_defaultAccount);
+      _accounts.add(_defaultAccount);
+    });
   }
 
   @override
@@ -62,11 +71,17 @@ class _DashboardPageState extends State<DashboardPage> {
         color: global.baseColor,
         child: Row(
           children: [
-            AlpacaSummeryWidget(
-              account: _alpacaAccount,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AlpacaSummeryWidget(
+                  account: _alpacaAccount,
+                ),
+                const QuickAddWidget(),
+              ],
             ),
             TotalSummeryWidget(
-              alpacaPositions: _alpacaPositions,
+              accounts: _accounts,
             ),
           ],
         ),
