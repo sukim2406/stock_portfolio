@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     'accountapp',
+    'portfolioapp',
 ]
 
 MIDDLEWARE = [

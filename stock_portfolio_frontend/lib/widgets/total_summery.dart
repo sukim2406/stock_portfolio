@@ -17,14 +17,6 @@ class TotalSummeryWidget extends StatefulWidget {
 }
 
 class _TotalSummeryWidgetState extends State<TotalSummeryWidget> {
-  double getAccountCost(Map account) {
-    double totalCost = 0;
-    for (Map ticker in account['positions']) {
-      totalCost += double.parse(ticker['cost_basis']);
-    }
-    return totalCost;
-  }
-
   bool checkData() {
     Map data = widget.accounts[0];
     if (data['positions'] != null) {
@@ -35,6 +27,16 @@ class _TotalSummeryWidgetState extends State<TotalSummeryWidget> {
       }
     }
     return false;
+  }
+
+  double getAccountCost(Map account) {
+    double totalCost = 0;
+    if (account['positions'] != null) {
+      for (Map ticker in account['positions']) {
+        totalCost += double.parse(ticker['cost_basis']);
+      }
+    }
+    return totalCost;
   }
 
   double getPortfolioCost(List accounts) {
@@ -48,8 +50,10 @@ class _TotalSummeryWidgetState extends State<TotalSummeryWidget> {
 
   double getAccountValue(Map account) {
     double marketValue = 0;
-    for (Map ticker in account['positions']) {
-      marketValue += double.parse(ticker['market_value']);
+    if (account['positions'] != null) {
+      for (Map ticker in account['positions']) {
+        marketValue += double.parse(ticker['market_value']);
+      }
     }
     return marketValue;
   }

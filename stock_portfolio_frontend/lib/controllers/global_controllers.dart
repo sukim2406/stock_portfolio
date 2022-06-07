@@ -22,7 +22,7 @@ Color baseColor = Colors.black87;
 Color backgroundColor = Colors.black;
 Color profitColor = Colors.greenAccent;
 Color lossColor = Colors.redAccent;
-Color evenColor = Colors.grey;
+Color evenColor = Colors.blueGrey;
 
 double getSummeryWidth(context) {
   return getWidth(context) * .44;

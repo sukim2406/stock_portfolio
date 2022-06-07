@@ -18,7 +18,7 @@ class SummeryTileWidget extends StatefulWidget {
 }
 
 class _SummeryTileWidgetState extends State<SummeryTileWidget> {
-  bool _expanded = true;
+  bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,10 @@ class _SummeryTileWidgetState extends State<SummeryTileWidget> {
               alignment: Alignment.centerLeft,
               color: Colors.grey,
               child: Text(
-                widget.accountData['title'],
+                (widget.accountData['title'] == 'Alpaca')
+                    ? widget.accountData['title'] +
+                        ' (Default) - click to expand'
+                    : widget.accountData['title'],
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -55,22 +58,31 @@ class _SummeryTileWidgetState extends State<SummeryTileWidget> {
           (_expanded)
               ? SizedBox(
                   width: global.getSummeryWidth(context),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: widget.accountData['positions'].length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return SummeryTickerTileWidget(
-                        ticker: widget.accountData['positions'][index]
-                            ['symbol'],
-                        pl: double.parse(widget.accountData['positions'][index]
-                            ['unrealized_pl']),
-                        plpc: double.parse(widget.accountData['positions']
-                            [index]['unrealized_plpc']),
-                        qty: int.parse(
-                            widget.accountData['positions'][index]['qty']),
-                      );
-                    },
-                  ),
+                  child: (widget.accountData['positions'] != null)
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.accountData['positions'].length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return SummeryTickerTileWidget(
+                              ticker: widget.accountData['positions'][index]
+                                  ['symbol'],
+                              pl: double.parse(widget.accountData['positions']
+                                  [index]['unrealized_pl']),
+                              plpc: double.parse(widget.accountData['positions']
+                                  [index]['unrealized_plpc']),
+                              qty: int.parse(widget.accountData['positions']
+                                  [index]['qty']),
+                            );
+                          },
+                        )
+                      : const Center(
+                          child: Text(
+                            'No tickers yet',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                 )
               : Container(),
           Container(

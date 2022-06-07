@@ -20,11 +20,17 @@ class TextInputWidget extends StatelessWidget {
     return SizedBox(
       width: width,
       child: TextField(
+        style: const TextStyle(
+          color: Colors.white,
+        ),
         enabled: enabled,
         obscureText: obsecure,
         controller: controller,
         decoration: InputDecoration(
           labelText: label,
+          labelStyle: const TextStyle(
+            color: Colors.white,
+          ),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
               color: Colors.grey,
@@ -32,7 +38,7 @@ class TextInputWidget extends StatelessWidget {
           ),
           focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.lightBlueAccent,
+              color: Colors.greenAccent,
             ),
           ),
         ),

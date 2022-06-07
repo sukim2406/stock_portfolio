@@ -28,6 +28,9 @@ class ApiControllers extends GetxController {
       SFControllers.instance.setToken(
         jsonResponse['token'],
       );
+      SFControllers.instance.setCurUser(
+        jsonResponse['user'],
+      );
       return true;
     } else {
       return false;
@@ -74,6 +77,9 @@ class ApiControllers extends GetxController {
       SFControllers.instance.setToken(
         jsonResponse['token'],
       );
+      SFControllers.instance.setCurUser(
+        jsonResponse['user'],
+      );
       return true;
     }
     return false;
@@ -107,6 +113,45 @@ class ApiControllers extends GetxController {
 
     var jsonResponse = json.decode(response.body);
 
+    return jsonResponse;
+  }
+
+  createAccount(title, cash) async {
+    String token = await SFControllers.instance.getToken();
+    Map data = {
+      'title': title,
+      'cash': cash,
+    };
+    var response = await http.post(
+      Uri.parse(
+        UrlControllers.instance.getAccountCreateUrl(),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+      body: data,
+    );
+    var jsonResponse = json.decode(response.body);
+    if (response.statusCode == 201) {
+      return true;
+    }
+    return false;
+  }
+
+  getAccountLists() async {
+    String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+
+    var response = await http.get(
+      Uri.parse(
+        UrlControllers.instance.getAccountListUrl(curUser),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+    );
+
+    var jsonResponse = json.decode(response.body);
     return jsonResponse;
   }
 }

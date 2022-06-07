@@ -23,7 +23,7 @@ class RoundedBtnWidget extends StatelessWidget {
       child: ElevatedButton(
         onPressed: func,
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.white),
+          backgroundColor: MaterialStateProperty.all(Colors.transparent),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(

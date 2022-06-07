@@ -16,8 +16,30 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   Map _alpacaAccount = {};
-  List _accounts = [];
-  Map _defaultAccount = {};
+  final List _accounts = [];
+  final Map _defaultAccount = {};
+
+  void initAlpacaAccount() {
+    ApiControllers.instance.getAlpacaAccount().then(
+      (result) {
+        setState(
+          () {
+            _alpacaAccount = result;
+            _defaultAccount['cash'] = result['cash'];
+            _defaultAccount['title'] = 'Alpaca';
+          },
+        );
+      },
+    );
+    ApiControllers.instance.getAlpacaPositions().then(
+      (result) {
+        sortPositions(result);
+      },
+    );
+    setState(() {
+      _accounts.add(_defaultAccount);
+    });
+  }
 
   void sortPositions(rawData) {
     List alpacaPositions = [];
@@ -36,30 +58,37 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
+  void initCustomAccounts() {
+    ApiControllers.instance.getAccountLists().then((result) {
+      if (result.length != 0) {
+        for (Map account in result) {
+          setState(() {
+            _accounts.add(account);
+          });
+        }
+      }
+    });
+  }
+
+  void clearData() {
+    setState(() {
+      _accounts.clear();
+      _alpacaAccount.clear();
+      _defaultAccount.clear();
+    });
+  }
+
+  void updateAccounts() {
+    clearData();
+    initAlpacaAccount();
+    initCustomAccounts();
+  }
+
   @override
   void initState() {
     super.initState();
-    ApiControllers.instance.getAlpacaAccount().then(
-      (result) {
-        setState(
-          () {
-            _alpacaAccount = result;
-            _defaultAccount['cash'] = result['cash'];
-            _defaultAccount['title'] = 'Alpaca - default : Click to expand';
-          },
-        );
-      },
-    );
-    ApiControllers.instance.getAlpacaPositions().then(
-      (result) {
-        sortPositions(result);
-      },
-    );
-    setState(() {
-      _accounts.add(_defaultAccount);
-      _accounts.add(_defaultAccount);
-      _accounts.add(_defaultAccount);
-    });
+    initAlpacaAccount();
+    initCustomAccounts();
   }
 
   @override
@@ -77,7 +106,10 @@ class _DashboardPageState extends State<DashboardPage> {
                 AlpacaSummeryWidget(
                   account: _alpacaAccount,
                 ),
-                const QuickAddWidget(),
+                QuickAddWidget(
+                  newAccountCallback: updateAccounts,
+                  accounts: _accounts,
+                ),
               ],
             ),
             TotalSummeryWidget(

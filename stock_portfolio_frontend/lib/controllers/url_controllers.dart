@@ -44,4 +44,14 @@ class UrlControllers extends GetxController {
     String alpacaPositionUrl = '$baseUrl/api/account/alpaca-positions/';
     return alpacaPositionUrl;
   }
+
+  getAccountCreateUrl() {
+    String portfolioCreateUrl = '$baseUrl/api/portfolio/create/';
+    return portfolioCreateUrl;
+  }
+
+  getAccountListUrl(username) {
+    String portfolioListUrl = '$baseUrl/api/portfolio/$username/list/';
+    return portfolioListUrl;
+  }
 }
