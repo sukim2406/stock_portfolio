@@ -59,15 +59,49 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void initCustomAccounts() {
-    ApiControllers.instance.getAccountLists().then((result) {
-      if (result.length != 0) {
-        for (Map account in result) {
-          setState(() {
-            _accounts.add(account);
-          });
+    ApiControllers.instance.getAccountLists().then(
+      (result) {
+        if (result.length != 0) {
+          for (Map account in result) {
+            ApiControllers.instance.listTicker(account['title']).then(
+              (results) {
+                List positions = [];
+                for (Map result in results) {
+                  Map sortedMap = {
+                    'symbol': result['ticker'],
+                    'qty': result['qty'],
+                    'cost_basis':
+                        (double.parse(result['averagePrice']) * result['qty'])
+                            .toString(),
+                    'market_value':
+                        (double.parse(result['currentPrice']) * result['qty'])
+                            .toString(),
+                    'unrealized_pl': ((double.parse(result['currentPrice']) *
+                                result['qty']) -
+                            (double.parse(result['averagePrice']) *
+                                result['qty']))
+                        .toString(),
+                    'unrealized_plpc': ((double.parse(result['currentPrice']) *
+                                result['qty']) /
+                            (double.parse(result['averagePrice']) *
+                                result['qty']))
+                        .toString(),
+                  };
+                  sortedMap['qty'] = sortedMap['qty'].toString();
+                  positions.add(sortedMap);
+                }
+                account['positions'] = positions;
+              },
+            );
+            setState(
+              () {
+                _accounts.add(account);
+              },
+            );
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   void clearData() {

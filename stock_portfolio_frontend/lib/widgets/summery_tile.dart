@@ -58,7 +58,8 @@ class _SummeryTileWidgetState extends State<SummeryTileWidget> {
           (_expanded)
               ? SizedBox(
                   width: global.getSummeryWidth(context),
-                  child: (widget.accountData['positions'] != null)
+                  child: (widget.accountData['positions'] != null &&
+                          widget.accountData['positions'].isNotEmpty)
                       ? ListView.builder(
                           shrinkWrap: true,
                           itemCount: widget.accountData['positions'].length,

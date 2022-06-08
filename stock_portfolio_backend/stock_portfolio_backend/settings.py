@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 
     'accountapp',
     'portfolioapp',
+    'tickerapp',
 ]
 
 MIDDLEWARE = [

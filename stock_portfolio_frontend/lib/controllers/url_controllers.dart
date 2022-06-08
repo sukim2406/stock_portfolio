@@ -54,4 +54,14 @@ class UrlControllers extends GetxController {
     String portfolioListUrl = '$baseUrl/api/portfolio/$username/list/';
     return portfolioListUrl;
   }
+
+  getAddTickerUrl() {
+    String addTickerUrl = '$baseUrl/api/ticker/add/';
+    return addTickerUrl;
+  }
+
+  getListTickerUrl(accountSlug) {
+    String listTickerUrl = '$baseUrl/api/ticker/$accountSlug/list/';
+    return listTickerUrl;
+  }
 }

@@ -21,4 +21,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/account/', include('accountapp.api.urls', 'account_api')),
     path('api/portfolio/', include('portfolioapp.api.urls', 'portfolio_api')),
+    path('api/ticker/', include('tickerapp.api.urls', 'ticker_api')),
 ]

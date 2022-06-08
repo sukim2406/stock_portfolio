@@ -154,4 +154,47 @@ class ApiControllers extends GetxController {
     var jsonResponse = json.decode(response.body);
     return jsonResponse;
   }
+
+  addTicker(username, portfolio, ticker, qty, averagePrice) async {
+    String token = await SFControllers.instance.getToken();
+    Map data = {
+      'username': username,
+      'portfolioSlug': portfolio,
+      'ticker': ticker,
+      'qty': qty,
+      'averagePrice': averagePrice,
+    };
+    var response = await http.post(
+      Uri.parse(
+        UrlControllers.instance.getAddTickerUrl(),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+      body: data,
+    );
+    var jsonResponse = json.decode(response.body);
+    if (response.statusCode == 201) {
+      return true;
+    }
+    return false;
+  }
+
+  listTicker(account) async {
+    String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+
+    var accountSlug = '$curUser-$account';
+    var response = await http.get(
+      Uri.parse(
+        UrlControllers.instance.getListTickerUrl(accountSlug),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+    );
+
+    var jsonResponse = json.decode(response.body);
+    return jsonResponse;
+  }
 }

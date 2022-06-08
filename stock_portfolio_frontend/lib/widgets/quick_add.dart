@@ -75,6 +75,7 @@ class _QuickAddWidgetState extends State<QuickAddWidget>
                 ),
                 QuickAddStockWidget(
                   accounts: widget.accounts,
+                  newStockCallback: widget.newAccountCallback,
                 ),
               ],
             ),
