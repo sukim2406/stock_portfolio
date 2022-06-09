@@ -1,7 +1,8 @@
+from os import stat
 from turtle import st
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from portfolioapp.api.serializers import PortfolioSerializer
+from portfolioapp.api.serializers import PortfolioSerializer, PortfolioCashUpdateSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
@@ -31,3 +32,23 @@ class ListPortfolioView(ListAPIView):
         username = self.kwargs['slug']
         queryset = Portfolio.objects.all().filter(username = username)
         return queryset
+
+@api_view(['PUT',])
+@permission_classes((IsAuthenticated,))
+def update_cash_view(request, slug):
+    try:
+        portfolio = Portfolio.objects.get(slug=slug)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    user = request.user
+    if portfolio.user != user:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    
+    if request.method == 'PUT':
+        serializer = PortfolioCashUpdateSerializer(portfolio,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

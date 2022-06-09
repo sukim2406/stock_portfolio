@@ -64,4 +64,14 @@ class UrlControllers extends GetxController {
     String listTickerUrl = '$baseUrl/api/ticker/$accountSlug/list/';
     return listTickerUrl;
   }
+
+  getUpdateCashUrl(accountSlug) {
+    String updateCashUrl = '$baseUrl/api/portfolio/$accountSlug/update/';
+    return updateCashUrl;
+  }
+
+  getQuickOrderUrl() {
+    String quickOrderUrl = '$baseUrl/api/ticker/quickorder/';
+    return quickOrderUrl;
+  }
 }

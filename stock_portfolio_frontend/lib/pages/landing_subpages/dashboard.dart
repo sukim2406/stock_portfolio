@@ -91,11 +91,12 @@ class _DashboardPageState extends State<DashboardPage> {
                   positions.add(sortedMap);
                 }
                 account['positions'] = positions;
-              },
-            );
-            setState(
-              () {
-                _accounts.add(account);
+
+                setState(
+                  () {
+                    _accounts.add(account);
+                  },
+                );
               },
             );
           }

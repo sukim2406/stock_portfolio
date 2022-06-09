@@ -94,11 +94,23 @@ class _QuickAddStockWidgetState extends State<QuickAddStockWidget> {
             width: null,
             func: () {
               if (selectedItem == 'Alpaca') {
-                print(' do alpaca order');
+                SFControllers.instance.getCurUser().then(
+                  (result) {
+                    var account = result + '-' + selectedItem;
+                    account = account.toLowerCase();
+                    ApiControllers.instance.quickOrder(
+                        result,
+                        account,
+                        tickerController.text,
+                        qtyController.text,
+                        priceController.text);
+                  },
+                );
               } else {
                 SFControllers.instance.getCurUser().then(
                   (result) {
                     var account = result + '-' + selectedItem;
+                    account = account.toLowerCase();
                     ApiControllers.instance
                         .addTicker(
                       result,
@@ -109,13 +121,18 @@ class _QuickAddStockWidgetState extends State<QuickAddStockWidget> {
                     )
                         .then((result) {
                       if (result) {
-                        setState(() {
-                          selectedItem = items[0];
+                        ApiControllers.instance
+                            .updateCash(account, priceController.text,
+                                qtyController.text)
+                            .then((result) {
+                          setState(() {
+                            selectedItem = items[0];
+                          });
+                          tickerController.clear();
+                          priceController.clear();
+                          qtyController.clear();
+                          widget.newStockCallback();
                         });
-                        tickerController.clear();
-                        priceController.clear();
-                        qtyController.clear();
-                        widget.newStockCallback();
                       } else {
                         global.printErrorBar(context, 'Unsuccessful');
                       }

@@ -131,7 +131,6 @@ class ApiControllers extends GetxController {
       },
       body: data,
     );
-    var jsonResponse = json.decode(response.body);
     if (response.statusCode == 201) {
       return true;
     }
@@ -159,7 +158,7 @@ class ApiControllers extends GetxController {
     String token = await SFControllers.instance.getToken();
     Map data = {
       'username': username,
-      'portfolioSlug': portfolio,
+      'portfolioSlug': portfolio.toLowerCase(),
       'ticker': ticker,
       'qty': qty,
       'averagePrice': averagePrice,
@@ -173,7 +172,6 @@ class ApiControllers extends GetxController {
       },
       body: data,
     );
-    var jsonResponse = json.decode(response.body);
     if (response.statusCode == 201) {
       return true;
     }
@@ -185,6 +183,7 @@ class ApiControllers extends GetxController {
     String curUser = await SFControllers.instance.getCurUser();
 
     var accountSlug = '$curUser-$account';
+    accountSlug = accountSlug.toLowerCase();
     var response = await http.get(
       Uri.parse(
         UrlControllers.instance.getListTickerUrl(accountSlug),
@@ -196,5 +195,53 @@ class ApiControllers extends GetxController {
 
     var jsonResponse = json.decode(response.body);
     return jsonResponse;
+  }
+
+  updateCash(accountSlug, averagePrice, qty) async {
+    String token = await SFControllers.instance.getToken();
+    Map data = {
+      'averagePrice': averagePrice,
+      'qty': qty,
+      'slug': accountSlug,
+    };
+
+    var response = await http.put(
+      Uri.parse(
+        UrlControllers.instance.getUpdateCashUrl(accountSlug),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+      body: data,
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  quickOrder(username, portfolio, ticker, qty, averagePrice) async {
+    String token = await SFControllers.instance.getToken();
+    Map data = {
+      'username': username,
+      'portfolioSlug': portfolio.toLowerCase(),
+      'ticker': ticker,
+      'qty': qty,
+      'averagePrice': averagePrice,
+    };
+    var response = await http.post(
+      Uri.parse(
+        UrlControllers.instance.getQuickOrderUrl(),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+      body: data,
+    );
+    if (response.statusCode == 201) {
+      return true;
+    }
+    return false;
   }
 }
