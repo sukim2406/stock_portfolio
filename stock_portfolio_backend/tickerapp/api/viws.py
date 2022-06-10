@@ -1,3 +1,4 @@
+from os import stat
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -12,7 +13,7 @@ import requests, json
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
-def add_ticker_view(request):
+def create_ticker_view(request):
     try:
         account = request.user
     except Account.DoesNotExist:
@@ -21,6 +22,8 @@ def add_ticker_view(request):
     if request.method == "POST":
         serializer = TickerSerializer(data=request.data)
 
+        print('hihihihi')
+
         if serializer.is_valid():
             headers = {'APCA-API-KEY-ID': account.alpaca_api_key, 'APCA-API-SECRET-KEY': account.alpaca_secret_key}
             account_url = "https://data.alpaca.markets/v2/stocks/{}/snapshot".format(serializer.validated_data['ticker'])
@@ -28,8 +31,11 @@ def add_ticker_view(request):
             data = json.loads(r.content)
             if(r.status_code == 200):
                 serializer.validated_data['currentPrice'] = data['latestTrade']['p']
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                try:
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                except:
+                    return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -67,16 +73,12 @@ def alpaca_quick_order_view(request):
             print(serializer.data['qty'])
             print(serializer.data['averagePrice'])
             body = {
-                'symbol': serializer.data['ticker'],
+                'symbol': serializer.data['ticker'].upper(),
                 'qty': serializer.data['qty'],
-                'notional': '',
                 'side': 'buy',
                 'type': 'limit',
                 'time_in_force': 'gtc',
                 'limit_price': serializer.data['averagePrice'],
-                'stop_price': '',
-                'trail_price': '',
-                'trail_percent': '',
             }
             print(body)
             headers = {'APCA-API-KEY-ID': account.alpaca_api_key, 'APCA-API-SECRET-KEY': account.alpaca_secret_key}
@@ -89,11 +91,32 @@ def alpaca_quick_order_view(request):
                 base_url = live_url
             order_url = "{}/v2/orders".format(base_url)
             # account_url = "https://data.alpaca.markets/v2/orders".format(serializer.validated_data['ticker'])
-            r = requests.post(order_url, headers=headers, data=body)
+            r = requests.post(order_url, headers=headers, json=body)
             data = json.loads(r.content)
             if(r.status_code == 200):
                 print('worked?')
                 return Response(data=data, status=status.HTTP_201_CREATED)
             print(data)
     
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT',])
+@permission_classes((IsAuthenticated,))
+def update_ticker_view(request, slug):
+    print('hi')
+    try:
+        ticker = Ticker.objects.get(slug=slug)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    user = request.user
+    if ticker.user != user:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    if request.method == 'PUT':
+        serializer = TickerSerializer(ticker, data=request.data)
+        if serializer.is_valid():
+            serializer.update()
+            return Response(status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -56,7 +56,7 @@ class UrlControllers extends GetxController {
   }
 
   getAddTickerUrl() {
-    String addTickerUrl = '$baseUrl/api/ticker/add/';
+    String addTickerUrl = '$baseUrl/api/ticker/create/';
     return addTickerUrl;
   }
 
@@ -73,5 +73,10 @@ class UrlControllers extends GetxController {
   getQuickOrderUrl() {
     String quickOrderUrl = '$baseUrl/api/ticker/quickorder/';
     return quickOrderUrl;
+  }
+
+  getUpdateTickerUrl(tickerSlug) {
+    String updateTickerUrl = '$baseUrl/api/ticker/$tickerSlug/update/';
+    return updateTickerUrl;
   }
 }

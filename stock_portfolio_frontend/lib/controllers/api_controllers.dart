@@ -172,10 +172,12 @@ class ApiControllers extends GetxController {
       },
       body: data,
     );
-    if (response.statusCode == 201) {
-      return true;
-    }
-    return false;
+
+    return response.statusCode;
+    // if (response.statusCode == 201) {
+    //   return true;
+    // }
+    // return false;
   }
 
   listTicker(account) async {
@@ -240,6 +242,32 @@ class ApiControllers extends GetxController {
       body: data,
     );
     if (response.statusCode == 201) {
+      return true;
+    }
+    return false;
+  }
+
+  updateTicker(username, portfolio, ticker, qty, averagePrice) async {
+    String token = await SFControllers.instance.getToken();
+    Map data = {
+      'username': username,
+      'portfolioSlug': portfolio.toLowerCase(),
+      'ticker': ticker,
+      'qty': qty,
+      'averagePrice': averagePrice,
+    };
+    String tickerSlug = ticker + '-' + portfolio.toLowerCase();
+
+    var response = await http.put(
+      Uri.parse(
+        UrlControllers.instance.getUpdateTickerUrl(tickerSlug),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+      body: data,
+    );
+    if (response.statusCode == 200) {
       return true;
     }
     return false;

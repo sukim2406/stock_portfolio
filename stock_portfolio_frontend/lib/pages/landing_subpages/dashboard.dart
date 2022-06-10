@@ -81,8 +81,10 @@ class _DashboardPageState extends State<DashboardPage> {
                             (double.parse(result['averagePrice']) *
                                 result['qty']))
                         .toString(),
-                    'unrealized_plpc': ((double.parse(result['currentPrice']) *
-                                result['qty']) /
+                    'unrealized_plpc': (((double.parse(result['currentPrice']) *
+                                    result['qty']) -
+                                (double.parse(result['averagePrice']) *
+                                    result['qty'])) /
                             (double.parse(result['averagePrice']) *
                                 result['qty']))
                         .toString(),

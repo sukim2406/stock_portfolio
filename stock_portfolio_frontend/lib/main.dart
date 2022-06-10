@@ -7,6 +7,7 @@ import 'package:window_size/window_size.dart';
 import './controllers/url_controllers.dart';
 import './controllers/shared_preferences_controllers.dart';
 import './controllers/api_controllers.dart';
+import './controllers/alpaca_controllers.dart';
 
 import './pages/home.dart';
 
@@ -19,6 +20,9 @@ void main() {
   );
   Get.put(
     ApiControllers(),
+  );
+  Get.put(
+    AlpacaControllers(),
   );
   if (Platform.isMacOS) {
     setWindowTitle('Stock Portfolio');

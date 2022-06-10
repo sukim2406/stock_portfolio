@@ -111,6 +111,7 @@ class _QuickAddStockWidgetState extends State<QuickAddStockWidget> {
                   (result) {
                     var account = result + '-' + selectedItem;
                     account = account.toLowerCase();
+
                     ApiControllers.instance
                         .addTicker(
                       result,
@@ -119,8 +120,8 @@ class _QuickAddStockWidgetState extends State<QuickAddStockWidget> {
                       qtyController.text,
                       priceController.text,
                     )
-                        .then((result) {
-                      if (result) {
+                        .then((statusCode) {
+                      if (statusCode == 201) {
                         ApiControllers.instance
                             .updateCash(account, priceController.text,
                                 qtyController.text)
@@ -133,8 +134,38 @@ class _QuickAddStockWidgetState extends State<QuickAddStockWidget> {
                           qtyController.clear();
                           widget.newStockCallback();
                         });
+                      } else if (statusCode == 500) {
+                        ApiControllers.instance
+                            .updateTicker(
+                          result,
+                          account,
+                          tickerController.text,
+                          qtyController.text,
+                          priceController.text,
+                        )
+                            .then((result) {
+                          if (result) {
+                            ApiControllers.instance
+                                .updateCash(account, priceController.text,
+                                    qtyController.text)
+                                .then((result) {
+                              if (result) {
+                                setState(() {
+                                  selectedItem = items[0];
+                                });
+                                tickerController.clear();
+                                priceController.clear();
+                                qtyController.clear();
+                                widget.newStockCallback();
+                              }
+                            });
+                          } else {
+                            global.printErrorBar(
+                                context, 'update ticker error');
+                          }
+                        });
                       } else {
-                        global.printErrorBar(context, 'Unsuccessful');
+                        global.printErrorBar(context, result.toString());
                       }
                     });
                   },
