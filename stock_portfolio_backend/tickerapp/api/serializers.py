@@ -11,7 +11,6 @@ class TickerSerializer(serializers.ModelSerializer):
         newQty = ticker.qty + self.validated_data['qty']
         newSubtotal = (ticker.averagePrice * ticker.qty) + (self.validated_data['averagePrice'] * self.validated_data['qty'])
         newAveragePrice = newSubtotal / newQty
-        print(newAveragePrice)
         ticker.qty = newQty
         ticker.averagePrice = newAveragePrice
         ticker.save()

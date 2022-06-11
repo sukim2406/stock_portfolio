@@ -6,6 +6,7 @@ import '../widgets/side_bar.dart';
 
 import '../pages/landing_subpages/logout.dart';
 import '../pages/landing_subpages/dashboard.dart';
+import '../pages/landing_subpages/detail.dart';
 
 class LandingPage extends StatefulWidget {
   final VoidCallback updateCurUser;
@@ -31,7 +32,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     List<Widget> pages = [
       const DashboardPage(),
-      const Text('hi'),
+      const DetailPage(),
       const Text('bye'),
       LogoutPage(updateCurUser: widget.updateCurUser),
     ];

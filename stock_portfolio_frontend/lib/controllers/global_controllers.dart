@@ -35,3 +35,7 @@ Color plColor(double value) {
           ? evenColor
           : lossColor;
 }
+
+double getDetailedWidth(context) {
+  return getWidth(context) * .88;
+}

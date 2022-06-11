@@ -50,9 +50,9 @@ class SideBarWidget extends StatelessWidget {
               updatePage(1);
             },
             child: SideBarEntryWidget(
-              icon: const Icon(Icons.add_box_outlined),
-              selectedIcon: const Icon(Icons.add_box),
-              text: 'add',
+              icon: const Icon(Icons.list),
+              selectedIcon: const Icon(Icons.list_outlined),
+              text: 'detail',
               selected: (index == 1) ? true : false,
             ),
           ),

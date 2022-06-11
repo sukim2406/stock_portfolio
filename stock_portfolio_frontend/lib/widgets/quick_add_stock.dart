@@ -98,12 +98,27 @@ class _QuickAddStockWidgetState extends State<QuickAddStockWidget> {
                   (result) {
                     var account = result + '-' + selectedItem;
                     account = account.toLowerCase();
-                    ApiControllers.instance.quickOrder(
-                        result,
-                        account,
-                        tickerController.text,
-                        qtyController.text,
-                        priceController.text);
+                    ApiControllers.instance
+                        .quickOrder(
+                      result,
+                      account,
+                      tickerController.text,
+                      qtyController.text,
+                      priceController.text,
+                    )
+                        .then((result) {
+                      if (result) {
+                        setState(() {
+                          selectedItem = items[0];
+                        });
+                        tickerController.clear();
+                        priceController.clear();
+                        qtyController.clear();
+                        widget.newStockCallback();
+                      } else {
+                        global.printErrorBar(context, 'quick order error');
+                      }
+                    });
                   },
                 );
               } else {
