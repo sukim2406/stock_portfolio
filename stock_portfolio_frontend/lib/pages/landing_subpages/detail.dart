@@ -47,9 +47,15 @@ class _DetailPageState extends State<DetailPage> {
       sortedMap['symbol'] = position['symbol'];
       sortedMap['qty'] = position['qty'];
       sortedMap['unrealized_pl'] = position['unrealized_pl'];
-      sortedMap['unrealized_plpc'] = position['unrealized_plpc'];
+      sortedMap['unrealized_plpc'] =
+          (double.parse(position['unrealized_plpc']) * 100.0)
+              .toStringAsFixed(2);
       sortedMap['market_value'] = position['market_value'];
       sortedMap['cost_basis'] = position['cost_basis'];
+      sortedMap['avg_price'] = position['avg_entry_price'];
+      sortedMap['lastPrice'] = (double.parse(position['market_value']) /
+              double.parse(position['qty']))
+          .toStringAsFixed(2);
       alpacaPositions.add(sortedMap);
     }
     setState(() {
@@ -67,26 +73,30 @@ class _DetailPageState extends State<DetailPage> {
                 List positions = [];
                 for (Map result in results) {
                   Map sortedMap = {
+                    'avg_price': result['averagePrice'],
+                    'lastPrice': result['currentPrice'],
                     'symbol': result['ticker'],
                     'qty': result['qty'],
                     'cost_basis':
                         (double.parse(result['averagePrice']) * result['qty'])
-                            .toString(),
+                            .toStringAsFixed(2),
                     'market_value':
                         (double.parse(result['currentPrice']) * result['qty'])
-                            .toString(),
+                            .toStringAsFixed(2),
                     'unrealized_pl': ((double.parse(result['currentPrice']) *
                                 result['qty']) -
                             (double.parse(result['averagePrice']) *
                                 result['qty']))
-                        .toString(),
-                    'unrealized_plpc': (((double.parse(result['currentPrice']) *
-                                    result['qty']) -
-                                (double.parse(result['averagePrice']) *
-                                    result['qty'])) /
-                            (double.parse(result['averagePrice']) *
-                                result['qty']))
-                        .toString(),
+                        .toStringAsFixed(2),
+                    'unrealized_plpc':
+                        ((((double.parse(result['currentPrice']) *
+                                            result['qty']) -
+                                        (double.parse(result['averagePrice']) *
+                                            result['qty'])) /
+                                    (double.parse(result['averagePrice']) *
+                                        result['qty'])) *
+                                100.00)
+                            .toStringAsFixed(2),
                   };
                   sortedMap['qty'] = sortedMap['qty'].toString();
                   positions.add(sortedMap);
@@ -122,7 +132,6 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initAlpacaAccount();
     initCustomAccounts();

@@ -17,114 +17,77 @@ class DetailedListWidget extends StatefulWidget {
 }
 
 class _DetailedListWidgetState extends State<DetailedListWidget> {
+  double getAccountCost(Map account) {
+    double totalCost = 0;
+    if (account['positions'] != null) {
+      for (Map ticker in account['positions']) {
+        totalCost += double.parse(ticker['cost_basis']);
+      }
+    }
+    return totalCost;
+  }
+
+  double getAccountValue(Map account) {
+    double marketValue = 0;
+    if (account['positions'] != null) {
+      for (Map ticker in account['positions']) {
+        marketValue += double.parse(ticker['market_value']);
+      }
+    }
+    return marketValue;
+  }
+
+  void calcAccountTotals() {
+    if (widget.accounts[0]['title'] != null) {
+      for (Map account in widget.accounts) {
+        print(account.toString());
+        account['account_cost'] = getAccountCost(account).toStringAsFixed(2);
+        account['account_value'] = getAccountValue(account).toStringAsFixed(2);
+        account['account_pl'] =
+            (getAccountValue(account) - getAccountCost(account))
+                .toStringAsFixed(2);
+        account['account_plpc'] =
+            ((getAccountValue(account) - getAccountCost(account)) /
+                    getAccountCost(account) *
+                    100)
+                .toStringAsFixed(2);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.accounts);
+    calcAccountTotals();
     return CardWidget(
       height: global.getHeight(context) * .68,
       width: global.getDetailedWidth(context),
       title: 'Detailed Portfolio',
-      content: Column(
-        children: [
-          SizedBox(
-            height: global.getHeight(context) * .58,
-            child: ListView.builder(
-              padding: const EdgeInsets.only(
-                top: 5,
-                bottom: 5,
+      content: (widget.accounts[0]['title'] != null)
+          ? Column(
+              children: [
+                SizedBox(
+                  height: global.getHeight(context) * .63,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(
+                      top: 5,
+                      bottom: 5,
+                    ),
+                    itemCount: widget.accounts.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return DetailedAccountTileWidget(
+                        account: widget.accounts[index],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            )
+          : SizedBox(
+              height: global.getHeight(context) * .63,
+              child: const Center(
+                child: CircularProgressIndicator(),
               ),
-              itemCount: widget.accounts.length,
-              itemBuilder: (BuildContext context, int index) {
-                return DetailedAccountTileWidget();
-              },
             ),
-          ),
-        ],
-        // children: [
-        //   Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: const [
-        //       Text(
-        //         'Account',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Cash',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Account P&L',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Account P&L %',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Mkt Value',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        //   Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //     children: const [
-        //       Text(
-        //         'Ticker',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Quantity',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Mkt Value',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Open P&L',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Open P&L %',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Last Price',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Avg Price',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ],
-      ),
     );
   }
 }
