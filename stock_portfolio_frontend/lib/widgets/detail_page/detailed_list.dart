@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/global_controllers.dart' as global;
+import '../../controllers/global_controllers.dart' as global;
 
-import '../widgets/card.dart';
-import '../widgets/detailed_account_tile.dart';
+import '../card.dart';
+import 'detailed_account_tile.dart';
 
 class DetailedListWidget extends StatefulWidget {
   final List accounts;

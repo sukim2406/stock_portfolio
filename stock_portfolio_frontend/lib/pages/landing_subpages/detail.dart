@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../controllers/global_controllers.dart' as global;
 import '../../controllers/api_controllers.dart';
 
-import '../../widgets/detailed_list.dart';
-import '../../widgets/detailed_summery.dart';
+import '../../widgets/detail_page/detailed_list.dart';
+import '../../widgets/detail_page/detailed_summery.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({Key? key}) : super(key: key);
@@ -150,7 +150,10 @@ class _DetailPageState extends State<DetailPage> {
             DetailedListWidget(
               accounts: _accounts,
             ),
-            const DetailedSummeryWidget(),
+            DetailedSummeryWidget(
+              accounts: _accounts,
+              updateAccounts: updateAccounts,
+            ),
           ],
         ),
       ),

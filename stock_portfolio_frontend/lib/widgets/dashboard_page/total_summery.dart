@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/global_controllers.dart' as global;
+import '../../controllers/global_controllers.dart' as global;
 
-import '../widgets/card.dart';
-import '../widgets/summery_tile.dart';
+import '../card.dart';
+import 'summery_tile.dart';
 
 class TotalSummeryWidget extends StatefulWidget {
   final List accounts;

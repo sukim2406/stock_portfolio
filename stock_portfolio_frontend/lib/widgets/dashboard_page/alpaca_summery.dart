@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/global_controllers.dart' as global;
+import '../../controllers/global_controllers.dart' as global;
 
-import '../widgets/card.dart';
-import '../widgets/info_text.dart';
+import '../card.dart';
+import '../info_text.dart';
 
 class AlpacaSummeryWidget extends StatelessWidget {
   final Map account;

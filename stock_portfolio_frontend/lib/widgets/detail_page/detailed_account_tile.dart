@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/global_controllers.dart' as global;
+import '../../controllers/global_controllers.dart' as global;
 
-import '../widgets/detailed_ticker_tile.dart';
-import '../widgets/ticker_text.dart';
+import 'detailed_ticker_tile.dart';
+import '../ticker_text.dart';
 
 class DetailedAccountTileWidget extends StatefulWidget {
   final Map account;

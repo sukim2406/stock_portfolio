@@ -2,9 +2,9 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 
-import '../controllers/global_controllers.dart' as global;
+import '../../controllers/global_controllers.dart' as global;
 
-import '../widgets/summery_ticker_tile.dart';
+import './summery_ticker_tile.dart';
 
 class SummeryTileWidget extends StatefulWidget {
   final Map accountData;

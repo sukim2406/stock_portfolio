@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../controllers/global_controllers.dart' as global;
 import '../../controllers/api_controllers.dart';
 
-import '../../widgets/alpaca_summery.dart';
-import '../../widgets/total_summery.dart';
-import '../../widgets/quick_add.dart';
+import '../../widgets/dashboard_page/alpaca_summery.dart';
+import '../../widgets/dashboard_page/total_summery.dart';
+import '../../widgets/dashboard_page/quick_add.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);

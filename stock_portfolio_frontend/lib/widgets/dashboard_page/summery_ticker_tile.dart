@@ -1,7 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 
-import '../controllers/global_controllers.dart' as global;
+import '../../controllers/global_controllers.dart' as global;
 
 class SummeryTickerTileWidget extends StatelessWidget {
   final String ticker;

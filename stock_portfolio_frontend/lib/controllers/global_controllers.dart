@@ -39,3 +39,11 @@ Color plColor(double value) {
 double getDetailedWidth(context) {
   return getWidth(context) * .88;
 }
+
+double getDetailedSummeryWidth(context) {
+  return getWidth(context) * .78;
+}
+
+double getDetailedSummeryHeight(context) {
+  return getHeight(context) * .23;
+}

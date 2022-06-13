@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/global_controllers.dart' as global;
+import '../../controllers/global_controllers.dart' as global;
 
-import '../widgets/card.dart';
-import '../widgets/quick_add_account.dart';
-import '../widgets/quick_add_stock.dart';
+import '../card.dart';
+import 'quick_add_account.dart';
+import 'quick_add_stock.dart';
 
 class QuickAddWidget extends StatefulWidget {
   final List accounts;

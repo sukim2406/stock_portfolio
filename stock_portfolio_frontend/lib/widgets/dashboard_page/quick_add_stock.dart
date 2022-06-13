@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/text_input.dart';
-import '../widgets/rounded_btn.dart';
+import '../text_input.dart';
+import '../rounded_btn.dart';
 
-import '../controllers/global_controllers.dart' as global;
-import '../controllers/api_controllers.dart';
-import '../controllers/shared_preferences_controllers.dart';
+import '../../controllers/global_controllers.dart' as global;
+import '../../controllers/api_controllers.dart';
+import '../../controllers/shared_preferences_controllers.dart';
 
 class QuickAddStockWidget extends StatefulWidget {
   final VoidCallback newStockCallback;

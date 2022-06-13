@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/global_controllers.dart' as global;
+import '../../controllers/global_controllers.dart' as global;
 
-import '../widgets/ticker_text.dart';
+import '../ticker_text.dart';
 
 class DetailedTickerTileWidget extends StatelessWidget {
   final Map ticker;
