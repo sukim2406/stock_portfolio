@@ -6,6 +6,7 @@ import '../../widgets/card.dart';
 import '../../widgets/detail_page/detailed_summery_sidebar.dart';
 import '../../widgets/detail_page/detailed_summery_total.dart';
 import '../../widgets/detail_page/detailed_summery_new_account.dart';
+import '../../widgets/detail_page/detailed_summery_update_ticker.dart';
 
 class DetailedSummeryWidget extends StatefulWidget {
   final VoidCallback updateAccounts;
@@ -38,11 +39,9 @@ class _DetailedSummeryWidgetState extends State<DetailedSummeryWidget> {
       DetailedSummeryNewAccountWidget(
         updateAccounts: widget.updateAccounts,
       ),
-      const Text(
-        'Ticker',
-        style: TextStyle(
-          color: Colors.white,
-        ),
+      DetailedSummeryUpdateTicker(
+        updateAccounts: widget.updateAccounts,
+        accounts: widget.accounts,
       ),
       const Text(
         'Recent',

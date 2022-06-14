@@ -93,6 +93,9 @@ class _QuickAddStockWidgetState extends State<QuickAddStockWidget> {
             height: null,
             width: null,
             func: () {
+              Map targetAccount = widget.accounts.firstWhere(
+                (account) => account['title'] == selectedItem,
+              );
               if (selectedItem == 'Alpaca') {
                 SFControllers.instance.getCurUser().then(
                   (result) {
@@ -122,69 +125,30 @@ class _QuickAddStockWidgetState extends State<QuickAddStockWidget> {
                   },
                 );
               } else {
-                SFControllers.instance.getCurUser().then(
-                  (result) {
-                    var account = result + '-' + selectedItem;
-                    account = account.toLowerCase();
-
-                    ApiControllers.instance
-                        .addTicker(
-                      result,
-                      account,
-                      tickerController.text,
-                      qtyController.text,
-                      priceController.text,
-                    )
-                        .then((statusCode) {
-                      if (statusCode == 201) {
-                        ApiControllers.instance
-                            .updateCash(account, priceController.text,
-                                qtyController.text)
-                            .then((result) {
-                          setState(() {
-                            selectedItem = items[0];
-                          });
-                          tickerController.clear();
-                          priceController.clear();
-                          qtyController.clear();
-                          widget.newStockCallback();
-                        });
-                      } else if (statusCode == 500) {
-                        ApiControllers.instance
-                            .updateTicker(
-                          result,
-                          account,
-                          tickerController.text,
-                          qtyController.text,
-                          priceController.text,
-                        )
-                            .then((result) {
-                          if (result) {
-                            ApiControllers.instance
-                                .updateCash(account, priceController.text,
-                                    qtyController.text)
-                                .then((result) {
-                              if (result) {
-                                setState(() {
-                                  selectedItem = items[0];
-                                });
-                                tickerController.clear();
-                                priceController.clear();
-                                qtyController.clear();
-                                widget.newStockCallback();
-                              }
-                            });
-                          } else {
-                            global.printErrorBar(
-                                context, 'update ticker error');
-                          }
-                        });
-                      } else {
-                        global.printErrorBar(context, result.toString());
-                      }
-                    });
-                  },
-                );
+                if (double.parse(targetAccount['cash']) -
+                        (double.parse(qtyController.text) *
+                            double.parse(priceController.text)) <
+                    0) {
+                  global.printErrorBar(context, 'Insufficient cash balance');
+                } else {
+                  ApiControllers.instance
+                      .addStock(
+                    selectedItem,
+                    tickerController.text,
+                    qtyController.text,
+                    priceController.text,
+                  )
+                      .then((result) {
+                    if (result) {
+                      tickerController.clear();
+                      qtyController.clear();
+                      priceController.clear();
+                      widget.newStockCallback();
+                    } else {
+                      global.printErrorBar(context, 'Update unsuccessful');
+                    }
+                  });
+                }
               }
             },
             label: 'ADD',

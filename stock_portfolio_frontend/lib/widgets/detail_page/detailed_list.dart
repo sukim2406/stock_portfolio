@@ -40,7 +40,6 @@ class _DetailedListWidgetState extends State<DetailedListWidget> {
   void calcAccountTotals() {
     if (widget.accounts[0]['title'] != null) {
       for (Map account in widget.accounts) {
-        print(account.toString());
         account['account_cost'] = getAccountCost(account).toStringAsFixed(2);
         account['account_value'] = getAccountValue(account).toStringAsFixed(2);
         account['account_pl'] =

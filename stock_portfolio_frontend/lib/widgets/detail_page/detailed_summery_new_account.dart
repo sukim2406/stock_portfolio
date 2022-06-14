@@ -59,56 +59,34 @@ class DetailedSummeryNewAccountWidget extends StatelessWidget {
             width: global.getDetailedSummeryWidth(context) * .2,
             color: global.accentColor,
             func: () {
-              try {
-                double.parse(cashController.text);
-                ApiControllers.instance
-                    .createAccount(titleController.text, cashController.text)
-                    .then(
-                  (result) {
-                    if (result) {
-                      titleController.clear();
-                      cashController.clear();
-                      updateAccounts();
-                    } else {
-                      global.printErrorBar(
-                          context, 'Account Creation Unsuccessful');
-                    }
-                  },
-                );
-              } catch (e) {
-                global.printErrorBar(context, 'Invalid input detected');
+              if (global.isNumber(cashController.text)) {
+                if (global.accountTitleCheck(titleController.text)) {
+                  ApiControllers.instance
+                      .createAccount(titleController.text, cashController.text)
+                      .then(
+                    (result) {
+                      if (result) {
+                        titleController.clear();
+                        cashController.clear();
+                        updateAccounts();
+                      } else {
+                        global.printErrorBar(
+                            context, 'Account Creation Unsuccessful');
+                      }
+                    },
+                  );
+                } else {
+                  global.printErrorBar(
+                      context, 'Title cannot have space " " or slash "/" ');
+                }
+              } else {
+                global.printErrorBar(context, 'Cash input must be type double');
               }
             },
             label: 'ADD',
           )
         ],
       ),
-      // Column(
-      //   children: [
-      //     Container(
-      //       height: global.getDetailedSummeryHeight(context) / 3,
-      //       width: global.getDetailedSummeryWidth(context),
-      //       child: Row(
-      //         children: [
-      //           const Text(
-      //             'Title',
-      //             style: TextStyle(
-      //               color: Colors.grey,
-      //               fontSize: 15,
-      //             ),
-      //           ),
-      //           TextInputWidget(
-      //             width: global.getDetailedSummeryWidth(context) / 2,
-      //             label: '',
-      //             controller: titleController,
-      //             obsecure: false,
-      //             enabled: true,
-      //           )
-      //         ],
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

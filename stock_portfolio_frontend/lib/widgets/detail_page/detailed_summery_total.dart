@@ -71,7 +71,7 @@ class _DetailedSummeryTotalWidgetState
           ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
+                SizedBox(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -91,7 +91,7 @@ class _DetailedSummeryTotalWidgetState
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -111,7 +111,7 @@ class _DetailedSummeryTotalWidgetState
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -131,7 +131,7 @@ class _DetailedSummeryTotalWidgetState
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -153,7 +153,7 @@ class _DetailedSummeryTotalWidgetState
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -175,7 +175,7 @@ class _DetailedSummeryTotalWidgetState
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -197,7 +197,7 @@ class _DetailedSummeryTotalWidgetState
                 ),
               ],
             )
-          : Center(
+          : const Center(
               child: CircularProgressIndicator(),
             ),
     );

@@ -199,30 +199,6 @@ class ApiControllers extends GetxController {
     return jsonResponse;
   }
 
-  updateCash(accountSlug, averagePrice, qty) async {
-    String token = await SFControllers.instance.getToken();
-    Map data = {
-      'averagePrice': averagePrice,
-      'qty': qty,
-      'slug': accountSlug,
-    };
-
-    var response = await http.put(
-      Uri.parse(
-        UrlControllers.instance.getUpdateCashUrl(accountSlug),
-      ),
-      headers: {
-        HttpHeaders.authorizationHeader: 'Token $token',
-      },
-      body: data,
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    }
-    return false;
-  }
-
   quickOrder(username, portfolio, ticker, qty, averagePrice) async {
     String token = await SFControllers.instance.getToken();
     Map data = {
@@ -247,29 +223,145 @@ class ApiControllers extends GetxController {
     return false;
   }
 
-  updateTicker(username, portfolio, ticker, qty, averagePrice) async {
+  addStock(account, ticker, qty, price) async {
     String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+
+    String portfolioSlug = '$curUser-${account.toLowerCase()}';
+
     Map data = {
-      'username': username,
-      'portfolioSlug': portfolio.toLowerCase(),
+      'username': curUser,
+      'portfolioSlug': portfolioSlug,
       'ticker': ticker,
       'qty': qty,
-      'averagePrice': averagePrice,
+      'averagePrice': price,
     };
-    String tickerSlug = ticker + '-' + portfolio.toLowerCase();
 
-    var response = await http.put(
-      Uri.parse(
-        UrlControllers.instance.getUpdateTickerUrl(tickerSlug),
-      ),
-      headers: {
-        HttpHeaders.authorizationHeader: 'Token $token',
-      },
-      body: data,
-    );
-    if (response.statusCode == 200) {
-      return true;
+    if (account == 'Alpaca') {
+      return false;
+    } else {
+      var response = await http.post(
+        Uri.parse(
+          UrlControllers.instance.getAddTickerUrl(),
+        ),
+        headers: {
+          HttpHeaders.authorizationHeader: 'Token $token',
+        },
+        body: data,
+      );
+      if (response.statusCode == 201) {
+        Map data = {
+          'averagePrice': price,
+          'qty': qty,
+          'slug': portfolioSlug,
+        };
+        var response = await http.put(
+          Uri.parse(
+            UrlControllers.instance.getUpdateCashUrl(portfolioSlug),
+          ),
+          headers: {
+            HttpHeaders.authorizationHeader: 'Token $token',
+          },
+          body: data,
+        );
+        if (response.statusCode == 200) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (response.statusCode == 500) {
+        String tickerSlug = '${data['ticker']}-${data['portfolioSlug']}';
+
+        var response = await http.put(
+          Uri.parse(
+            UrlControllers.instance.getUpdateTickerUrl(tickerSlug),
+          ),
+          headers: {
+            HttpHeaders.authorizationHeader: 'Token $token',
+          },
+          body: data,
+        );
+        if (response.statusCode == 200) {
+          Map data = {
+            'averagePrice': price,
+            'qty': qty,
+            'slug': portfolioSlug,
+          };
+          var response = await http.put(
+            Uri.parse(
+              UrlControllers.instance.getUpdateCashUrl(portfolioSlug),
+            ),
+            headers: {
+              HttpHeaders.authorizationHeader: 'Token $token',
+            },
+            body: data,
+          );
+          if (response.statusCode == 200) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
     }
-    return false;
+  }
+
+  removeStock(account, ticker, qty, price) async {
+    String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+
+    String portfolioSlug = '$curUser-${account.toLowerCase()}';
+    String negQty = (double.parse(qty) * -1).toString();
+
+    Map data = {
+      'username': curUser,
+      'portfolioSlug': portfolioSlug,
+      'ticker': ticker,
+      'qty': negQty,
+      'averagePrice': price,
+    };
+
+    if (account == 'Alpaca') {
+      return false;
+    } else {
+      String tickerSlug = '${data['ticker']}-${data['portfolioSlug']}';
+
+      var response = await http.put(
+        Uri.parse(
+          UrlControllers.instance.getUpdateTickerUrl(tickerSlug),
+        ),
+        headers: {
+          HttpHeaders.authorizationHeader: 'Token $token',
+        },
+        body: data,
+      );
+      if (response.statusCode == 200) {
+        Map data = {
+          'averagePrice': price,
+          'qty': negQty,
+          'slug': portfolioSlug,
+        };
+        var response = await http.put(
+          Uri.parse(
+            UrlControllers.instance.getUpdateCashUrl(portfolioSlug),
+          ),
+          headers: {
+            HttpHeaders.authorizationHeader: 'Token $token',
+          },
+          body: data,
+        );
+        if (response.statusCode == 200) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
   }
 }

@@ -41,24 +41,28 @@ class QuickAddAccountWidget extends StatelessWidget {
             height: null,
             width: null,
             func: () {
-              try {
-                double.parse(cashController.text);
-                ApiControllers.instance
-                    .createAccount(titleController.text, cashController.text)
-                    .then(
-                  (result) {
-                    if (result) {
-                      titleController.clear();
-                      cashController.clear();
-                      newAccountCallback();
-                    } else {
-                      global.printErrorBar(
-                          context, 'Account Creation Unsuccessful');
-                    }
-                  },
-                );
-              } catch (e) {
-                global.printErrorBar(context, 'Invalid input detected');
+              if (global.isNumber(cashController.text)) {
+                if (global.accountTitleCheck(titleController.text)) {
+                  ApiControllers.instance
+                      .createAccount(titleController.text, cashController.text)
+                      .then(
+                    (result) {
+                      if (result) {
+                        titleController.clear();
+                        cashController.clear();
+                        newAccountCallback();
+                      } else {
+                        global.printErrorBar(
+                            context, 'Account Creation Unsuccessful');
+                      }
+                    },
+                  );
+                } else {
+                  global.printErrorBar(
+                      context, 'Title cannot have space " " or slash "/" ');
+                }
+              } else {
+                global.printErrorBar(context, 'Cash input must be type double');
               }
             },
             label: 'CREATE',

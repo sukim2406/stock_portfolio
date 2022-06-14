@@ -47,3 +47,24 @@ double getDetailedSummeryWidth(context) {
 double getDetailedSummeryHeight(context) {
   return getHeight(context) * .23;
 }
+
+bool accountTitleCheck(String title) {
+  if (title.contains(' ')) {
+    return false;
+  }
+  if (title.contains('/')) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+bool isNumber(String number) {
+  try {
+    double.parse(number);
+
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
