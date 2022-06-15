@@ -149,6 +149,7 @@ class _DetailPageState extends State<DetailPage> {
           children: [
             DetailedListWidget(
               accounts: _accounts,
+              updateAccounts: updateAccounts,
             ),
             DetailedSummeryWidget(
               accounts: _accounts,

@@ -121,99 +121,220 @@ class _DetailedSummeryUpdateTickerState
           SizedBox(
             height: global.getDetailedSummeryHeight(context),
             width: global.getDetailedSummeryWidth(context) * .75,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextInputWidget(
-                  width: global.getDetailedSummeryWidth(context) * .1,
-                  label: 'Ticker',
-                  controller: tickerController,
-                  obsecure: false,
-                  enabled: (selectedAction == 'buy' || selectedAction == 'sell')
-                      ? true
-                      : false,
-                ),
-                TextInputWidget(
-                  width: global.getDetailedSummeryWidth(context) * .1,
-                  label: 'Qty',
-                  controller: qtyController,
-                  obsecure: false,
-                  enabled: (selectedAction == 'buy' || selectedAction == 'sell')
-                      ? true
-                      : false,
-                ),
-                TextInputWidget(
-                  width: global.getDetailedSummeryWidth(context) * .1,
-                  label: (selectedAction == 'deposit' ||
-                          selectedAction == 'withdraw')
-                      ? 'Amount'
-                      : 'Price',
-                  controller: priceController,
-                  obsecure: false,
-                  enabled: true,
-                ),
-                RoundedBtnWidget(
-                  height: null,
-                  width: null,
-                  func: () {
-                    Map targetAccount = widget.accounts.firstWhere(
-                      (account) => account['title'] == selectedAccount,
-                    );
-                    if (selectedAction == 'buy') {
-                      if (double.parse(targetAccount['cash']) -
-                              (double.parse(qtyController.text) *
-                                  double.parse(priceController.text)) <
-                          0) {
-                        global.printErrorBar(
-                            context, 'Insufficient cash balance');
-                      } else {
-                        ApiControllers.instance
-                            .addStock(
-                          selectedAccount,
-                          tickerController.text,
-                          qtyController.text,
-                          priceController.text,
-                        )
-                            .then((result) {
-                          if (result) {
-                            tickerController.clear();
-                            qtyController.clear();
-                            priceController.clear();
-                            widget.updateAccounts();
+                (selectedAccount == 'Alpaca')
+                    ? const Text(
+                        '% CAUTION : Buy & Sell action using Alpaca accounts will place actual limit order through connected Alpaca Account %',
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                        ),
+                      )
+                    : Container(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextInputWidget(
+                      width: global.getDetailedSummeryWidth(context) * .1,
+                      label: 'Ticker',
+                      controller: tickerController,
+                      obsecure: false,
+                      enabled:
+                          (selectedAction == 'buy' || selectedAction == 'sell')
+                              ? true
+                              : false,
+                    ),
+                    TextInputWidget(
+                      width: global.getDetailedSummeryWidth(context) * .1,
+                      label: 'Qty',
+                      controller: qtyController,
+                      obsecure: false,
+                      enabled:
+                          (selectedAction == 'buy' || selectedAction == 'sell')
+                              ? true
+                              : false,
+                    ),
+                    TextInputWidget(
+                      width: global.getDetailedSummeryWidth(context) * .1,
+                      label: (selectedAction == 'deposit' ||
+                              selectedAction == 'withdraw')
+                          ? 'Amount'
+                          : 'Price',
+                      controller: priceController,
+                      obsecure: false,
+                      enabled: true,
+                    ),
+                    RoundedBtnWidget(
+                      height: null,
+                      width: null,
+                      func: () {
+                        Map targetAccount = widget.accounts.firstWhere(
+                          (account) => account['title'] == selectedAccount,
+                        );
+                        if (selectedAction == 'buy') {
+                          if (selectedAccount == 'Alpaca') {
+                            ApiControllers.instance
+                                .alpacaQuickBuyOrder(
+                              selectedAccount,
+                              tickerController.text,
+                              qtyController.text,
+                              priceController.text,
+                            )
+                                .then((result) {
+                              if (result) {
+                                tickerController.clear();
+                                priceController.clear();
+                                qtyController.clear();
+                                widget.updateAccounts();
+                              } else {
+                                global.printErrorBar(
+                                    context, 'quick order error');
+                              }
+                            });
                           } else {
-                            global.printErrorBar(
-                                context, 'Update unsuccessful');
+                            if (double.parse(targetAccount['cash']) -
+                                    (double.parse(qtyController.text) *
+                                        double.parse(priceController.text)) <
+                                0) {
+                              global.printErrorBar(
+                                  context, 'Insufficient cash balance');
+                            } else {
+                              ApiControllers.instance
+                                  .addStock(
+                                selectedAccount,
+                                tickerController.text,
+                                qtyController.text,
+                                priceController.text,
+                              )
+                                  .then((result) {
+                                if (result) {
+                                  tickerController.clear();
+                                  qtyController.clear();
+                                  priceController.clear();
+                                  widget.updateAccounts();
+                                } else {
+                                  global.printErrorBar(
+                                      context, 'Update unsuccessful');
+                                }
+                              });
+                            }
                           }
-                        });
-                      }
-                    } else if (selectedAction == 'sell') {
-                      ApiControllers.instance
-                          .removeStock(selectedAccount, tickerController.text,
-                              qtyController.text, priceController.text)
-                          .then((result) {
-                        if (result) {
-                          tickerController.clear();
-                          qtyController.clear();
-                          priceController.clear();
-                          widget.updateAccounts();
+                        } else if (selectedAction == 'sell') {
+                          Map targetTicker =
+                              targetAccount['positions'].firstWhere(
+                            (position) =>
+                                position['symbol'] == tickerController.text,
+                          );
+                          if (selectedAccount == 'Alpaca') {
+                            ApiControllers.instance
+                                .alpacaQuickSellOrder(
+                              selectedAccount,
+                              tickerController.text,
+                              qtyController.text,
+                              priceController.text,
+                            )
+                                .then((result) {
+                              if (result) {
+                                tickerController.clear();
+                                priceController.clear();
+                                qtyController.clear();
+                                widget.updateAccounts();
+                              } else {
+                                global.printErrorBar(
+                                    context, 'quick order error');
+                              }
+                            });
+                          } else {
+                            if (double.parse(targetTicker['qty']) -
+                                    double.parse(qtyController.text) <
+                                0) {
+                              global.printErrorBar(context,
+                                  'Selling qty cannot be larger than current qty');
+                            } else if (double.parse(targetTicker['qty']) -
+                                    double.parse(qtyController.text) ==
+                                0) {
+                              ApiControllers.instance
+                                  .deletePosition(
+                                      selectedAccount,
+                                      tickerController.text,
+                                      qtyController.text,
+                                      priceController.text)
+                                  .then((result) {
+                                if (result) {
+                                  tickerController.clear();
+                                  qtyController.clear();
+                                  priceController.clear();
+                                  widget.updateAccounts();
+                                } else {
+                                  global.printErrorBar(
+                                      context, 'Update unsuccessful');
+                                }
+                              });
+                            } else {
+                              ApiControllers.instance
+                                  .removeStock(
+                                      selectedAccount,
+                                      tickerController.text,
+                                      qtyController.text,
+                                      priceController.text)
+                                  .then(
+                                (result) {
+                                  if (result) {
+                                    tickerController.clear();
+                                    qtyController.clear();
+                                    priceController.clear();
+                                    widget.updateAccounts();
+                                  } else {
+                                    global.printErrorBar(
+                                        context, 'Update unsuccessful');
+                                  }
+                                },
+                              );
+                            }
+                          }
+                        } else if (selectedAction == 'deposit' &&
+                            selectedAccount != 'Alpaca') {
+                          ApiControllers.instance
+                              .depositCash(
+                                  priceController.text, selectedAccount)
+                              .then((result) {
+                            if (result) {
+                              tickerController.clear();
+                              qtyController.clear();
+                              priceController.clear();
+                              widget.updateAccounts();
+                            } else {
+                              global.printErrorBar(
+                                  context, 'Update unsuccessful');
+                            }
+                          });
+                        } else if (selectedAction == 'withdraw' &&
+                            selectedAccount != 'Alpaca') {
+                          ApiControllers.instance
+                              .withdrawCash(
+                                  priceController.text, selectedAccount)
+                              .then((result) {
+                            if (result) {
+                              tickerController.clear();
+                              qtyController.clear();
+                              priceController.clear();
+                              widget.updateAccounts();
+                            } else {
+                              global.printErrorBar(
+                                  context, 'Update unsuccessful');
+                            }
+                          });
                         } else {
-                          global.printErrorBar(context, 'Update unsuccessful');
+                          global.printErrorBar(context,
+                              'You cannot use deposit & withdraw function with alpaca account');
                         }
-                      });
-                    } else if (selectedAction == 'deposit' &&
-                        selectedAccount != 'Alpaca') {
-                      print('deposit');
-                    } else if (selectedAction == 'withdraw' &&
-                        selectedAccount != 'Alpaca') {
-                      print('withdraw');
-                    } else {
-                      global.printErrorBar(context,
-                          'You cannot use deposit & withdraw function with alpaca account');
-                    }
-                  },
-                  label: 'SUBMIT',
-                  color: global.accentColor,
-                )
+                      },
+                      label: 'SUBMIT',
+                      color: global.accentColor,
+                    )
+                  ],
+                ),
               ],
             ),
           ),

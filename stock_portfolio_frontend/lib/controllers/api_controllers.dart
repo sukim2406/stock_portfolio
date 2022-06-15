@@ -210,7 +210,61 @@ class ApiControllers extends GetxController {
     };
     var response = await http.post(
       Uri.parse(
-        UrlControllers.instance.getQuickOrderUrl(),
+        UrlControllers.instance.getAlpacaQuickBuyUrl(),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+      body: data,
+    );
+    if (response.statusCode == 201) {
+      return true;
+    }
+    return false;
+  }
+
+  alpacaQuickBuyOrder(account, ticker, qty, averagePrice) async {
+    String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+    String portfolioSlug = '$curUser-${account.toLowerCase()}';
+
+    Map data = {
+      'username': curUser,
+      'portfolioSlug': portfolioSlug,
+      'ticker': ticker,
+      'qty': qty,
+      'averagePrice': averagePrice,
+    };
+    var response = await http.post(
+      Uri.parse(
+        UrlControllers.instance.getAlpacaQuickBuyUrl(),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+      body: data,
+    );
+    if (response.statusCode == 201) {
+      return true;
+    }
+    return false;
+  }
+
+  alpacaQuickSellOrder(account, ticker, qty, averagePrice) async {
+    String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+    String portfolioSlug = '$curUser-${account.toLowerCase()}';
+
+    Map data = {
+      'username': curUser,
+      'portfolioSlug': portfolioSlug,
+      'ticker': ticker,
+      'qty': qty,
+      'averagePrice': averagePrice,
+    };
+    var response = await http.post(
+      Uri.parse(
+        UrlControllers.instance.getAlpacaQuickSellUrl(),
       ),
       headers: {
         HttpHeaders.authorizationHeader: 'Token $token',
@@ -363,5 +417,120 @@ class ApiControllers extends GetxController {
         return false;
       }
     }
+  }
+
+  deletePosition(account, ticker, qty, price) async {
+    String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+    String portfolioSlug = '$curUser-${account.toLowerCase()}';
+    String negQty = (double.parse(qty) * -1).toString();
+    String tickerSlug = '${ticker}-${portfolioSlug}';
+
+    var response = await http.delete(
+      Uri.parse(
+        UrlControllers.instance.getDeleteTickerUrl(tickerSlug),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map data = {
+        'averagePrice': price,
+        'qty': negQty,
+        'slug': portfolioSlug,
+      };
+      var response = await http.put(
+        Uri.parse(
+          UrlControllers.instance.getUpdateCashUrl(portfolioSlug),
+        ),
+        headers: {
+          HttpHeaders.authorizationHeader: 'Token $token',
+        },
+        body: data,
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  depositCash(amount, account) async {
+    String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+    String portfolioSlug = '$curUser-${account.toLowerCase()}';
+
+    Map data = {
+      'averagePrice': amount,
+      'qty': '-1',
+      'slug': portfolioSlug,
+    };
+
+    var response = await http.put(
+      Uri.parse(
+        UrlControllers.instance.getUpdateCashUrl(portfolioSlug),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+      body: data,
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  withdrawCash(amount, account) async {
+    String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+    String portfolioSlug = '$curUser-${account.toLowerCase()}';
+
+    Map data = {
+      'averagePrice': amount,
+      'qty': '1',
+      'slug': portfolioSlug,
+    };
+
+    var response = await http.put(
+      Uri.parse(
+        UrlControllers.instance.getUpdateCashUrl(portfolioSlug),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+      body: data,
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  deleteAccount(account) async {
+    String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+    String accountSlug = '$curUser-${account.toLowerCase()}';
+
+    var response = await http.delete(
+      Uri.parse(
+        UrlControllers.instance.getDeleteAccountUrl(accountSlug),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 }

@@ -70,13 +70,28 @@ class UrlControllers extends GetxController {
     return updateCashUrl;
   }
 
-  getQuickOrderUrl() {
-    String quickOrderUrl = '$baseUrl/api/ticker/quickorder/';
+  getAlpacaQuickBuyUrl() {
+    String quickOrderUrl = '$baseUrl/api/ticker/alpaca-quickbuy/';
+    return quickOrderUrl;
+  }
+
+  getAlpacaQuickSellUrl() {
+    String quickOrderUrl = '$baseUrl/api/ticker/alpaca-quicksell/';
     return quickOrderUrl;
   }
 
   getUpdateTickerUrl(tickerSlug) {
     String updateTickerUrl = '$baseUrl/api/ticker/$tickerSlug/update/';
     return updateTickerUrl;
+  }
+
+  getDeleteTickerUrl(tickerSlug) {
+    String deleteTickerUrl = '$baseUrl/api/ticker/$tickerSlug/delete/';
+    return deleteTickerUrl;
+  }
+
+  getDeleteAccountUrl(accountSlug) {
+    String deleteAccountUrl = '$baseUrl/api/portfolio/$accountSlug/delete/';
+    return deleteAccountUrl;
   }
 }

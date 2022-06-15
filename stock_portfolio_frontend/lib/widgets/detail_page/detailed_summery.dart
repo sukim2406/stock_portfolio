@@ -43,12 +43,6 @@ class _DetailedSummeryWidgetState extends State<DetailedSummeryWidget> {
         updateAccounts: widget.updateAccounts,
         accounts: widget.accounts,
       ),
-      const Text(
-        'Recent',
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
     ];
 
     return CardWidget(

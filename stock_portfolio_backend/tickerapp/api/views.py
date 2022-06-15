@@ -56,7 +56,7 @@ class AlpacaTickerList(ListAPIView):
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
-def alpaca_quick_order_view(request):
+def alpaca_limit_buy_view(request):
     try:
         account = request.user
     except Account.DoesNotExist:
@@ -70,6 +70,43 @@ def alpaca_quick_order_view(request):
                 'symbol': serializer.data['ticker'].upper(),
                 'qty': serializer.data['qty'],
                 'side': 'buy',
+                'type': 'limit',
+                'time_in_force': 'gtc',
+                'limit_price': serializer.data['averagePrice'],
+            }
+            headers = {'APCA-API-KEY-ID': account.alpaca_api_key, 'APCA-API-SECRET-KEY': account.alpaca_secret_key}
+            live_url = "https://api.alpaca.markets"
+            paper_url = "https://paper-api.alpaca.markets"
+            base_url = ""
+            if(account.paper_account):
+                base_url = paper_url
+            else:
+                base_url = live_url
+            order_url = "{}/v2/orders".format(base_url)
+            # account_url = "https://data.alpaca.markets/v2/orders".format(serializer.validated_data['ticker'])
+            r = requests.post(order_url, headers=headers, json=body)
+            data = json.loads(r.content)
+            if(r.status_code == 200):
+                return Response(data=data, status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def alpaca_limit_sell_view(request):
+    try:
+        account = request.user
+    except Account.DoesNotExist:
+        return Response(status = status.HTTP_404_NOT_FOUND)
+
+    if request.method == "POST":
+        serializer = TickerSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            body = {
+                'symbol': serializer.data['ticker'].upper(),
+                'qty': serializer.data['qty'],
+                'side': 'sell',
                 'type': 'limit',
                 'time_in_force': 'gtc',
                 'limit_price': serializer.data['averagePrice'],
@@ -110,3 +147,22 @@ def update_ticker_view(request, slug):
             serializer.update()
             return Response(status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE',])
+@permission_classes((IsAuthenticated,))
+def delete_ticker_view(request, slug):
+    try:
+        ticker = Ticker.objects.get(slug=slug)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    user = request.user
+    if ticker.user != user:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    if request.method == 'DELETE':
+        operation = ticker.delete()
+        if(operation):
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

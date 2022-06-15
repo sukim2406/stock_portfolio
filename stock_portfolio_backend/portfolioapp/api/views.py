@@ -52,3 +52,22 @@ def update_cash_view(request, slug):
             return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['DELETE',])
+@permission_classes((IsAuthenticated,))
+def delete_portfolio_view(request, slug):
+    try:
+        portfolio = Portfolio.objects.get(slug=slug)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    user = request.user
+    if portfolio.user != user:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    
+    if request.method == 'DELETE':
+        operation = portfolio.delete()
+        if(operation):
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

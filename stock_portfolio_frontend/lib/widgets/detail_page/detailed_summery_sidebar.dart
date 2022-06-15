@@ -50,15 +50,6 @@ class DetailedSummerySideBarWidget extends StatelessWidget {
               selected: (index == 2) ? true : false,
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              updatePage(3);
-            },
-            child: DetailedSummerySideBarEntryWidget(
-              title: 'Recent activities',
-              selected: (index == 3) ? true : false,
-            ),
-          ),
         ],
       ),
     );

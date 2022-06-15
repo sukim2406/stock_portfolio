@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stock_portfolio_frontend/controllers/api_controllers.dart';
 
 import '../../controllers/global_controllers.dart' as global;
 
@@ -6,9 +7,11 @@ import 'detailed_ticker_tile.dart';
 import '../ticker_text.dart';
 
 class DetailedAccountTileWidget extends StatefulWidget {
+  final VoidCallback updateAccounts;
   final Map account;
   const DetailedAccountTileWidget({
     Key? key,
+    required this.updateAccounts,
     required this.account,
   }) : super(key: key);
 
@@ -54,6 +57,65 @@ class _DetailedAccountTileWidgetState extends State<DetailedAccountTileWidget> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  SizedBox(
+                    width: global.getWidth(context) * .025,
+                  ),
+                  (widget.account['title'] == 'Alpaca')
+                      ? Container()
+                      : GestureDetector(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Delete account'),
+                                    content: const Text(
+                                        'Are you sure to delete this account?'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          'Cancel',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          ApiControllers.instance
+                                              .deleteAccount(
+                                                  widget.account['title'])
+                                              .then(
+                                            (result) {
+                                              if (result) {
+                                                widget.updateAccounts();
+                                              } else {
+                                                global.printErrorBar(context,
+                                                    'Delete account failed');
+                                              }
+                                            },
+                                          );
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          'OK',
+                                          style: TextStyle(
+                                            color: Colors.redAccent,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.redAccent,
+                          ),
+                        ),
                   Expanded(
                     child: Container(),
                   ),

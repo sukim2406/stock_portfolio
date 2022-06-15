@@ -61,9 +61,9 @@ class SideBarWidget extends StatelessWidget {
               updatePage(2);
             },
             child: SideBarEntryWidget(
-              icon: const Icon(Icons.settings_outlined),
-              selectedIcon: const Icon(Icons.settings),
-              text: 'settings',
+              icon: const Icon(Icons.history),
+              selectedIcon: const Icon(Icons.history),
+              text: 'activities',
               selected: (index == 2) ? true : false,
             ),
           ),
@@ -72,10 +72,21 @@ class SideBarWidget extends StatelessWidget {
               updatePage(3);
             },
             child: SideBarEntryWidget(
+              icon: const Icon(Icons.settings_outlined),
+              selectedIcon: const Icon(Icons.settings),
+              text: 'settings',
+              selected: (index == 3) ? true : false,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              updatePage(4);
+            },
+            child: SideBarEntryWidget(
               icon: const Icon(Icons.power_off_outlined),
               selectedIcon: const Icon(Icons.power_off),
               text: 'logout',
-              selected: (index == 3) ? true : false,
+              selected: (index == 4) ? true : false,
             ),
           ),
         ],

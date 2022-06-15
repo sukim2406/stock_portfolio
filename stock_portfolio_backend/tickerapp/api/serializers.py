@@ -14,3 +14,4 @@ class TickerSerializer(serializers.ModelSerializer):
         ticker.qty = newQty
         ticker.averagePrice = newAveragePrice
         ticker.save()
+

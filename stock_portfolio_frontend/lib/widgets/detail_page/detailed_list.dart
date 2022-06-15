@@ -6,10 +6,12 @@ import '../card.dart';
 import 'detailed_account_tile.dart';
 
 class DetailedListWidget extends StatefulWidget {
+  final VoidCallback updateAccounts;
   final List accounts;
   const DetailedListWidget({
     Key? key,
     required this.accounts,
+    required this.updateAccounts,
   }) : super(key: key);
 
   @override
@@ -75,6 +77,7 @@ class _DetailedListWidgetState extends State<DetailedListWidget> {
                     itemBuilder: (BuildContext context, int index) {
                       return DetailedAccountTileWidget(
                         account: widget.accounts[index],
+                        updateAccounts: widget.updateAccounts,
                       );
                     },
                   ),
