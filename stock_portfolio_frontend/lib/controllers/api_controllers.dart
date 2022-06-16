@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:core';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -424,7 +425,7 @@ class ApiControllers extends GetxController {
     String curUser = await SFControllers.instance.getCurUser();
     String portfolioSlug = '$curUser-${account.toLowerCase()}';
     String negQty = (double.parse(qty) * -1).toString();
-    String tickerSlug = '${ticker}-${portfolioSlug}';
+    String tickerSlug = '$ticker-$portfolioSlug';
 
     var response = await http.delete(
       Uri.parse(
@@ -532,5 +533,53 @@ class ApiControllers extends GetxController {
       return true;
     }
     return false;
+  }
+
+  addActivity(account, activity, content, price, qty) async {
+    String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+    String accountSlug = '$curUser-${account.toLowerCase()}';
+
+    Map data = {
+      'title': account,
+      'portfolioSlug': accountSlug,
+      'activity': activity,
+      'content': content,
+      'price': price,
+      'date': DateTime.now().toString(),
+      'qty': (qty != null) ? qty : '',
+    };
+
+    var response = await http.post(
+      Uri.parse(
+        UrlControllers.instance.getCreateActivityUrl(),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+      body: data,
+    );
+
+    if (response.statusCode == 201) {
+      return true;
+    }
+    return false;
+  }
+
+  getActivityLists() async {
+    String token = await SFControllers.instance.getToken();
+    String curUser = await SFControllers.instance.getCurUser();
+
+    var response = await http.get(
+      Uri.parse(
+        UrlControllers.instance.getActivityListUrl(curUser),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+    );
+
+    var jsonResponse = json.decode(response.body);
+    return jsonResponse;
   }
 }

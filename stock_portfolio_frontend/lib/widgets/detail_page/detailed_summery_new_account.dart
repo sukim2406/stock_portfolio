@@ -66,9 +66,23 @@ class DetailedSummeryNewAccountWidget extends StatelessWidget {
                       .then(
                     (result) {
                       if (result) {
-                        titleController.clear();
-                        cashController.clear();
-                        updateAccounts();
+                        ApiControllers.instance
+                            .addActivity(
+                          titleController.text,
+                          'ACCOUNT CREATED',
+                          titleController.text,
+                          cashController.text,
+                          null,
+                        )
+                            .then(
+                          (result) {
+                            if (result) {
+                              titleController.clear();
+                              cashController.clear();
+                              updateAccounts();
+                            }
+                          },
+                        );
                       } else {
                         global.printErrorBar(
                             context, 'Account Creation Unsuccessful');

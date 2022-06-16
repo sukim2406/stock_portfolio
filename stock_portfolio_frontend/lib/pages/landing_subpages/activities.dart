@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../controllers/global_controllers.dart' as global;
 
-import '../../widgets/card.dart';
+import '../../widgets/activity_page/activity_list.dart';
 
 class ActivitiesPage extends StatefulWidget {
   const ActivitiesPage({Key? key}) : super(key: key);
@@ -19,19 +19,7 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
         height: global.getHeight(context),
         width: global.getWidth(context) * .9,
         color: global.baseColor,
-        child: CardWidget(
-          height: global.getHeight(context) * .95,
-          width: global.getWidth(context) * .9,
-          title: 'Activities',
-          content: const Center(
-            child: Text(
-              'hello world',
-              style: TextStyle(
-                color: Colors.redAccent,
-              ),
-            ),
-          ),
-        ),
+        child: const ActivityListWidget(),
       ),
     );
   }

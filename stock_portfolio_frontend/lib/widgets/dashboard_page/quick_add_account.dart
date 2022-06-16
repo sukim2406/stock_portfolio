@@ -48,9 +48,26 @@ class QuickAddAccountWidget extends StatelessWidget {
                       .then(
                     (result) {
                       if (result) {
-                        titleController.clear();
-                        cashController.clear();
-                        newAccountCallback();
+                        ApiControllers.instance
+                            .addActivity(
+                          titleController.text,
+                          'ACCOUNT CREATED',
+                          titleController.text,
+                          cashController.text,
+                          null,
+                        )
+                            .then(
+                          (result) {
+                            if (result) {
+                              titleController.clear();
+                              cashController.clear();
+                              newAccountCallback();
+                            } else {
+                              global.printErrorBar(
+                                  context, 'Activity not updated');
+                            }
+                          },
+                        );
                       } else {
                         global.printErrorBar(
                             context, 'Account Creation Unsuccessful');

@@ -209,10 +209,26 @@ class _DetailedSummeryUpdateTickerState
                               )
                                   .then((result) {
                                 if (result) {
-                                  tickerController.clear();
-                                  qtyController.clear();
-                                  priceController.clear();
-                                  widget.updateAccounts();
+                                  ApiControllers.instance
+                                      .addActivity(
+                                          selectedAccount,
+                                          'STOCK BUY',
+                                          tickerController.text,
+                                          priceController.text,
+                                          qtyController.text)
+                                      .then(
+                                    (result) {
+                                      if (result) {
+                                        tickerController.clear();
+                                        qtyController.clear();
+                                        priceController.clear();
+                                        widget.updateAccounts();
+                                      } else {
+                                        global.printErrorBar(
+                                            context, 'Activity update error');
+                                      }
+                                    },
+                                  );
                                 } else {
                                   global.printErrorBar(
                                       context, 'Update unsuccessful');
@@ -262,10 +278,26 @@ class _DetailedSummeryUpdateTickerState
                                       priceController.text)
                                   .then((result) {
                                 if (result) {
-                                  tickerController.clear();
-                                  qtyController.clear();
-                                  priceController.clear();
-                                  widget.updateAccounts();
+                                  ApiControllers.instance
+                                      .addActivity(
+                                          selectedAccount,
+                                          'STOCK SELL',
+                                          tickerController.text,
+                                          priceController.text,
+                                          qtyController.text)
+                                      .then(
+                                    (result) {
+                                      if (result) {
+                                        tickerController.clear();
+                                        qtyController.clear();
+                                        priceController.clear();
+                                        widget.updateAccounts();
+                                      } else {
+                                        global.printErrorBar(
+                                            context, 'Activity update error');
+                                      }
+                                    },
+                                  );
                                 } else {
                                   global.printErrorBar(
                                       context, 'Update unsuccessful');
@@ -281,10 +313,26 @@ class _DetailedSummeryUpdateTickerState
                                   .then(
                                 (result) {
                                   if (result) {
-                                    tickerController.clear();
-                                    qtyController.clear();
-                                    priceController.clear();
-                                    widget.updateAccounts();
+                                    ApiControllers.instance
+                                        .addActivity(
+                                            selectedAccount,
+                                            'STOCK SELL',
+                                            tickerController.text,
+                                            priceController.text,
+                                            qtyController.text)
+                                        .then(
+                                      (result) {
+                                        if (result) {
+                                          tickerController.clear();
+                                          qtyController.clear();
+                                          priceController.clear();
+                                          widget.updateAccounts();
+                                        } else {
+                                          global.printErrorBar(
+                                              context, 'Activity update error');
+                                        }
+                                      },
+                                    );
                                   } else {
                                     global.printErrorBar(
                                         context, 'Update unsuccessful');
@@ -300,10 +348,27 @@ class _DetailedSummeryUpdateTickerState
                                   priceController.text, selectedAccount)
                               .then((result) {
                             if (result) {
-                              tickerController.clear();
-                              qtyController.clear();
-                              priceController.clear();
-                              widget.updateAccounts();
+                              ApiControllers.instance
+                                  .addActivity(
+                                selectedAccount,
+                                'DEPOSIT',
+                                selectedAccount,
+                                priceController.text,
+                                '',
+                              )
+                                  .then(
+                                (result) {
+                                  if (result) {
+                                    tickerController.clear();
+                                    qtyController.clear();
+                                    priceController.clear();
+                                    widget.updateAccounts();
+                                  } else {
+                                    global.printErrorBar(
+                                        context, 'Activity update error');
+                                  }
+                                },
+                              );
                             } else {
                               global.printErrorBar(
                                   context, 'Update unsuccessful');
@@ -316,10 +381,27 @@ class _DetailedSummeryUpdateTickerState
                                   priceController.text, selectedAccount)
                               .then((result) {
                             if (result) {
-                              tickerController.clear();
-                              qtyController.clear();
-                              priceController.clear();
-                              widget.updateAccounts();
+                              ApiControllers.instance
+                                  .addActivity(
+                                selectedAccount,
+                                'WITHDRAW',
+                                selectedAccount,
+                                priceController.text,
+                                '',
+                              )
+                                  .then(
+                                (result) {
+                                  if (result) {
+                                    tickerController.clear();
+                                    qtyController.clear();
+                                    priceController.clear();
+                                    widget.updateAccounts();
+                                  } else {
+                                    global.printErrorBar(
+                                        context, 'Activity update error');
+                                  }
+                                },
+                              );
                             } else {
                               global.printErrorBar(
                                   context, 'Update unsuccessful');

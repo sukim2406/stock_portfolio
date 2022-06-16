@@ -94,4 +94,14 @@ class UrlControllers extends GetxController {
     String deleteAccountUrl = '$baseUrl/api/portfolio/$accountSlug/delete/';
     return deleteAccountUrl;
   }
+
+  getCreateActivityUrl() {
+    String createActivityUrl = '$baseUrl/api/activity/create/';
+    return createActivityUrl;
+  }
+
+  getActivityListUrl(username) {
+    String activityListUrl = '$baseUrl/api/activity/$username/list/';
+    return activityListUrl;
+  }
 }

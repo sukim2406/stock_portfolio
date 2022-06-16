@@ -5,7 +5,6 @@ import '../rounded_btn.dart';
 
 import '../../controllers/global_controllers.dart' as global;
 import '../../controllers/api_controllers.dart';
-import '../../controllers/shared_preferences_controllers.dart';
 
 class QuickAddStockWidget extends StatefulWidget {
   final VoidCallback newStockCallback;
@@ -133,10 +132,24 @@ class _QuickAddStockWidgetState extends State<QuickAddStockWidget> {
                   )
                       .then((result) {
                     if (result) {
-                      tickerController.clear();
-                      qtyController.clear();
-                      priceController.clear();
-                      widget.newStockCallback();
+                      ApiControllers.instance
+                          .addActivity(
+                        selectedItem,
+                        'STOCK BUY',
+                        tickerController.text,
+                        priceController.text,
+                        qtyController.text,
+                      )
+                          .then((result) {
+                        if (result) {
+                          tickerController.clear();
+                          qtyController.clear();
+                          priceController.clear();
+                          widget.newStockCallback();
+                        } else {
+                          global.printErrorBar(context, 'Activity not updated');
+                        }
+                      });
                     } else {
                       global.printErrorBar(context, 'Update unsuccessful');
                     }
