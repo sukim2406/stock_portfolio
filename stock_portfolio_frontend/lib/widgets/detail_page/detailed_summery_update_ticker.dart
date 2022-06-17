@@ -212,7 +212,7 @@ class _DetailedSummeryUpdateTickerState
                                   ApiControllers.instance
                                       .addActivity(
                                           selectedAccount,
-                                          'STOCK BUY',
+                                          'BUY',
                                           tickerController.text,
                                           priceController.text,
                                           qtyController.text)
@@ -281,7 +281,7 @@ class _DetailedSummeryUpdateTickerState
                                   ApiControllers.instance
                                       .addActivity(
                                           selectedAccount,
-                                          'STOCK SELL',
+                                          'SELL',
                                           tickerController.text,
                                           priceController.text,
                                           qtyController.text)
@@ -316,7 +316,7 @@ class _DetailedSummeryUpdateTickerState
                                     ApiControllers.instance
                                         .addActivity(
                                             selectedAccount,
-                                            'STOCK SELL',
+                                            'SELL',
                                             tickerController.text,
                                             priceController.text,
                                             qtyController.text)

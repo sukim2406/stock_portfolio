@@ -135,7 +135,7 @@ class _QuickAddStockWidgetState extends State<QuickAddStockWidget> {
                       ApiControllers.instance
                           .addActivity(
                         selectedItem,
-                        'STOCK BUY',
+                        'BUY',
                         tickerController.text,
                         priceController.text,
                         qtyController.text,

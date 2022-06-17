@@ -4,6 +4,7 @@ import '../../controllers/global_controllers.dart' as global;
 import '../../controllers/api_controllers.dart';
 
 import '../../widgets/card.dart';
+import '../../widgets/activity_page/activity_tile.dart';
 
 class ActivityListWidget extends StatefulWidget {
   const ActivityListWidget({Key? key}) : super(key: key);
@@ -46,55 +47,58 @@ class _ActivityListWidgetState extends State<ActivityListWidget> {
               height: global.getHeight(context) * .9,
               child: ListView.builder(
                 shrinkWrap: true,
-                reverse: true,
-                padding: const EdgeInsets.all(5),
+                // reverse: true,
                 itemCount: _activities.length,
+                padding: EdgeInsets.all(8.0),
                 itemBuilder: (BuildContext context, int index) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        _activities[index]['date'],
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        _activities[index]['title'],
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        _activities[index]['activity'],
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      (_activities[index]['activity'] != 'ACCOUNT CREATED')
-                          ? Text(
-                              _activities[index]['content'].toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
-                            )
-                          : Container(),
-                      Text(
-                        _activities[index]['price'],
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      (_activities[index]['activity'] != 'ACCOUNT CREATED')
-                          ? Text(
-                              _activities[index]['qty'].toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
-                            )
-                          : Container(),
-                    ],
+                  return ActivityTileWidget(
+                    activity: _activities[index],
                   );
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: [
+                  //     Text(
+                  //       _activities[index]['date'],
+                  //       style: const TextStyle(
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       _activities[index]['title'],
+                  //       style: const TextStyle(
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       _activities[index]['activity'],
+                  //       style: const TextStyle(
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //     (_activities[index]['activity'] != 'ACCOUNT CREATED')
+                  //         ? Text(
+                  //             _activities[index]['content'].toString(),
+                  //             style: const TextStyle(
+                  //               color: Colors.white,
+                  //             ),
+                  //           )
+                  //         : Container(),
+                  //     Text(
+                  //       _activities[index]['price'],
+                  //       style: const TextStyle(
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //     (_activities[index]['activity'] != 'ACCOUNT CREATED')
+                  //         ? Text(
+                  //             _activities[index]['qty'].toString(),
+                  //             style: const TextStyle(
+                  //               color: Colors.white,
+                  //             ),
+                  //           )
+                  //         : Container(),
+                  //   ],
+                  // );
                 },
               ),
             ),
