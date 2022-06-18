@@ -34,6 +34,7 @@ class _DetailedSummeryUpdateTickerState
   late TextEditingController tickerController;
   late TextEditingController priceController;
   late TextEditingController qtyController;
+  late DateTime dateTime;
 
   @override
   void initState() {
@@ -50,6 +51,7 @@ class _DetailedSummeryUpdateTickerState
     tickerController = TextEditingController();
     priceController = TextEditingController();
     qtyController = TextEditingController();
+    dateTime = DateTime.now();
   }
 
   @override
@@ -164,6 +166,15 @@ class _DetailedSummeryUpdateTickerState
                       controller: priceController,
                       obsecure: false,
                       enabled: true,
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {},
+                      child: SizedBox(
+                        width: global.getDetailedSummeryWidth(context) * .1,
+                        child: Text(
+                          '${dateTime.year}/${dateTime.month}/${dateTime.day}',
+                        ),
+                      ),
                     ),
                     RoundedBtnWidget(
                       height: null,

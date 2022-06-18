@@ -11,7 +11,6 @@ class ActivityTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(activity.toString());
     return Container(
       padding: const EdgeInsets.only(bottom: 8.0),
       height: global.getHeight(context) * .05,
