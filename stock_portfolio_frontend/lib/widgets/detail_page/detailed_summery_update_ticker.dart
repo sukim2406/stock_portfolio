@@ -35,6 +35,9 @@ class _DetailedSummeryUpdateTickerState
   late TextEditingController priceController;
   late TextEditingController qtyController;
   late DateTime dateTime;
+  late String hours;
+  late String minutes;
+  late String seconds;
 
   @override
   void initState() {
@@ -52,7 +55,44 @@ class _DetailedSummeryUpdateTickerState
     priceController = TextEditingController();
     qtyController = TextEditingController();
     dateTime = DateTime.now();
+    hours = dateTime.hour.toString().padLeft(2, '0');
+    minutes = dateTime.minute.toString().padLeft(2, '0');
+    seconds = dateTime.second.toString().padLeft(2, '0');
   }
+
+  Future pickDateTime() async {
+    DateTime? date = await pickDate();
+    if (date == null) return;
+
+    TimeOfDay? time = await pickTime();
+    if (time == null) return;
+
+    final dateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+
+    setState(() {
+      this.dateTime = dateTime;
+    });
+  }
+
+  Future<DateTime?> pickDate() => showDatePicker(
+        context: context,
+        initialDate: dateTime,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2100),
+      );
+
+  Future<TimeOfDay?> pickTime() => showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: dateTime.hour,
+        minute: dateTime.minute,
+      ));
 
   @override
   Widget build(BuildContext context) {
@@ -168,11 +208,13 @@ class _DetailedSummeryUpdateTickerState
                       enabled: true,
                     ),
                     ElevatedButton(
-                      onPressed: () async {},
+                      onPressed: () async {
+                        pickDateTime();
+                      },
                       child: SizedBox(
-                        width: global.getDetailedSummeryWidth(context) * .1,
+                        width: global.getDetailedSummeryWidth(context) * .15,
                         child: Text(
-                          '${dateTime.year}/${dateTime.month}/${dateTime.day}',
+                          '${dateTime.year}/${dateTime.month}/${dateTime.day} $hours:$minutes:$seconds',
                         ),
                       ),
                     ),
