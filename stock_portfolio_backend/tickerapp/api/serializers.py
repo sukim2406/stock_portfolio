@@ -9,7 +9,10 @@ class TickerSerializer(serializers.ModelSerializer):
     def update(self):
         ticker = Ticker.objects.get(slug=(self.validated_data['ticker'] + "-" + self.validated_data['portfolioSlug']))
         newQty = ticker.qty + self.validated_data['qty']
-        newSubtotal = (ticker.averagePrice * ticker.qty) + (self.validated_data['averagePrice'] * self.validated_data['qty'])
+        if(self.validated_data['qty'] > 0):
+            newSubtotal = (ticker.averagePrice * ticker.qty) + (self.validated_data['averagePrice'] * self.validated_data['qty'])
+        else:
+            newSubtotal = (ticker.averagePrice * ticker.qty) + (ticker.averagePrice * self.validated_data['qty'])
         newAveragePrice = newSubtotal / newQty
         ticker.qty = newQty
         ticker.averagePrice = newAveragePrice

@@ -93,11 +93,13 @@ def account_delete_view(request):
         operation = account.delete()
         data = {}
         if operation:
+
             data["success"] = "delete successful"
+            return Response(status=status.HTTP_200_OK, data=data)
         else:
             data["failure"] = "delete unsuccessful"
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=data)
         
-        return Response(data=data)
 
 
 @api_view(['GET',])

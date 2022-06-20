@@ -18,9 +18,11 @@ class _DetailedSummeryTotalWidgetState
     extends State<DetailedSummeryTotalWidget> {
   double getCostBasis() {
     double cost = 0;
-    for (Map account in widget.accounts) {
-      for (Map ticker in account['positions']) {
-        cost += double.parse(ticker['cost_basis']);
+    if (widget.accounts.isNotEmpty) {
+      for (Map account in widget.accounts) {
+        for (Map ticker in account['positions']) {
+          cost += double.parse(ticker['cost_basis']);
+        }
       }
     }
     return cost;
@@ -49,7 +51,7 @@ class _DetailedSummeryTotalWidgetState
     double pl = getPl();
     double cost = getCostBasis();
 
-    double plpc = (pl / cost) * 100;
+    double plpc = (cost != 0) ? (pl / cost) * 100 : 0;
 
     return plpc;
   }

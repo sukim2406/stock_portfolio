@@ -20,19 +20,14 @@ class UrlControllers extends GetxController {
     return loginUrl;
   }
 
-  getAccountDetailUrl() {
-    String accountDetailUrl = '$baseUrl/api/account/detail/';
-    return accountDetailUrl;
+  getProfileDetailUrl() {
+    String profileDetailUrl = '$baseUrl/api/account/detail/';
+    return profileDetailUrl;
   }
 
-  getAccountUpdateUrl() {
-    String accountUpdateUrl = '$baseUrl/api/account/update/';
-    return accountUpdateUrl;
-  }
-
-  getAccountDeleteUrl() {
-    String accountDeleteUrl = '$baseUrl/api/account/delete/';
-    return accountDeleteUrl;
+  getProfileDeleteUrl() {
+    String profileDeleteUrl = '$baseUrl/api/account/delete/';
+    return profileDeleteUrl;
   }
 
   getAlpacaAccountUrl() {
@@ -103,5 +98,10 @@ class UrlControllers extends GetxController {
   getActivityListUrl(username) {
     String activityListUrl = '$baseUrl/api/activity/$username/list/';
     return activityListUrl;
+  }
+
+  getPorfileUpdateUrl() {
+    String profileUpdateUrl = '$baseUrl/api/account/update/';
+    return profileUpdateUrl;
   }
 }

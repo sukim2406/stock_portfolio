@@ -47,11 +47,12 @@ class _DetailedListWidgetState extends State<DetailedListWidget> {
         account['account_pl'] =
             (getAccountValue(account) - getAccountCost(account))
                 .toStringAsFixed(2);
-        account['account_plpc'] =
-            ((getAccountValue(account) - getAccountCost(account)) /
+        account['account_plpc'] = (getAccountCost(account) != 0)
+            ? ((getAccountValue(account) - getAccountCost(account)) /
                     getAccountCost(account) *
                     100)
-                .toStringAsFixed(2);
+                .toStringAsFixed(2)
+            : '0';
       }
     }
   }

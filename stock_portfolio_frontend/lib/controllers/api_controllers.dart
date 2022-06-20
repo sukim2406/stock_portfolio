@@ -175,10 +175,6 @@ class ApiControllers extends GetxController {
     );
 
     return response.statusCode;
-    // if (response.statusCode == 201) {
-    //   return true;
-    // }
-    // return false;
   }
 
   listTicker(account) async {
@@ -581,5 +577,69 @@ class ApiControllers extends GetxController {
 
     var jsonResponse = json.decode(response.body);
     return jsonResponse;
+  }
+
+  updateProfile(
+      email, username, password, password2, apiKey, secretKey, paper) async {
+    Map data = {
+      'email': email,
+      'username': username,
+      'password': password,
+      'password2': password2,
+      'alpaca_api_key': apiKey,
+      'alpaca_secret_key': secretKey,
+      'paper_account': paper,
+    };
+
+    String token = await SFControllers.instance.getToken();
+
+    var response = await http.put(
+      Uri.parse(
+        UrlControllers.instance.getPorfileUpdateUrl(),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+      body: data,
+    );
+    var jsonResponse = json.decode(response.body);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  getProfileDetail() async {
+    String token = await SFControllers.instance.getToken();
+
+    var response = await http.get(
+      Uri.parse(
+        UrlControllers.instance.getProfileDetailUrl(),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+    );
+    var jsonResponse = json.decode(response.body);
+    return jsonResponse;
+  }
+
+  deleteProfile() async {
+    String token = await SFControllers.instance.getToken();
+
+    var response = await http.delete(
+      Uri.parse(
+        UrlControllers.instance.getProfileDeleteUrl(),
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      },
+    );
+    if (response.statusCode == 200) {
+      SFControllers.instance.clearToken();
+      return true;
+    } else {
+      return false;
+    }
   }
 }
