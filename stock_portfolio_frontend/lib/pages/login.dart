@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stock_portfolio_frontend/controllers/api_controllers.dart';
 
 import '../controllers/global_controllers.dart' as global;
@@ -34,9 +35,29 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 height: global.getHeight(context),
                 width: global.getWidth(context) * .6,
-                color: Colors.red,
+                color: global.accentColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'DIAMOND HANDS',
+                      style: GoogleFonts.rubik(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40,
+                      ),
+                    ),
+                    Text(
+                      'STOCK PORTFOLIO',
+                      style: GoogleFonts.rubik(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
+              Container(
+                color: Colors.black,
                 height: global.getHeight(context),
                 width: global.getWidth(context) * .4,
                 child: Column(
@@ -91,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                         }
                       },
                       label: 'LOG IN',
-                      color: Colors.lightBlueAccent,
+                      color: global.accentColor,
                     ),
                     SizedBox(
                       height: global.getHeight(context) * .06,
@@ -108,8 +129,8 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             TextSpan(
                               text: 'REGISTER',
-                              style: const TextStyle(
-                                color: Colors.lightBlueAccent,
+                              style: TextStyle(
+                                color: global.accentColor,
                                 fontWeight: FontWeight.bold,
                               ),
                               recognizer: TapGestureRecognizer()

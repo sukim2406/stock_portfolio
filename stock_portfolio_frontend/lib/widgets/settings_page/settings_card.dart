@@ -10,7 +10,11 @@ import '../../controllers/global_controllers.dart' as global;
 import '../../pages/home.dart';
 
 class SettingsCardWidget extends StatefulWidget {
-  const SettingsCardWidget({Key? key}) : super(key: key);
+  final VoidCallback updateCurUser;
+  const SettingsCardWidget({
+    Key? key,
+    required this.updateCurUser,
+  }) : super(key: key);
 
   @override
   State<SettingsCardWidget> createState() => _SettingsCardWidgetState();
@@ -24,6 +28,7 @@ class _SettingsCardWidgetState extends State<SettingsCardWidget> {
   TextEditingController apiKeyController = TextEditingController();
   TextEditingController secretKeyController = TextEditingController();
   bool _paperTrade = true;
+  bool _hideKeys = true;
 
   @override
   void initState() {
@@ -98,6 +103,28 @@ class _SettingsCardWidgetState extends State<SettingsCardWidget> {
                 ),
               ],
             ),
+            Theme(
+              data: ThemeData(unselectedWidgetColor: Colors.grey),
+              child: SizedBox(
+                width: global.getWidth(context) * .3,
+                child: CheckboxListTile(
+                  activeColor: global.accentColor,
+                  checkColor: Colors.black,
+                  title: const Text(
+                    'Hide Api Keys ?',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  value: _hideKeys,
+                  onChanged: (value) {
+                    setState(() {
+                      _hideKeys = value!;
+                    });
+                  },
+                ),
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -108,7 +135,7 @@ class _SettingsCardWidgetState extends State<SettingsCardWidget> {
                   width: global.getWidth(context) * .3,
                   label: 'Alpaca Api Key',
                   controller: apiKeyController,
-                  obsecure: false,
+                  obsecure: _hideKeys,
                   enabled: true,
                 ),
                 SizedBox(
@@ -118,26 +145,31 @@ class _SettingsCardWidgetState extends State<SettingsCardWidget> {
                   width: global.getWidth(context) * .3,
                   label: 'Alpaca Secret Key',
                   controller: secretKeyController,
-                  obsecure: false,
+                  obsecure: _hideKeys,
                   enabled: true,
                 ),
               ],
             ),
-            SizedBox(
-              width: global.getWidth(context) * .3,
-              child: CheckboxListTile(
-                title: const Text(
-                  'Paper Traing?',
-                  style: TextStyle(
-                    color: Colors.white,
+            Theme(
+              data: ThemeData(unselectedWidgetColor: Colors.grey),
+              child: SizedBox(
+                width: global.getWidth(context) * .3,
+                child: CheckboxListTile(
+                  activeColor: global.accentColor,
+                  checkColor: Colors.black,
+                  title: const Text(
+                    'Paper Traing?',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
+                  value: _paperTrade,
+                  onChanged: (value) {
+                    setState(() {
+                      _paperTrade = value!;
+                    });
+                  },
                 ),
-                value: _paperTrade,
-                onChanged: (value) {
-                  setState(() {
-                    _paperTrade = value!;
-                  });
-                },
               ),
             ),
             RoundedBtnWidget(
@@ -190,63 +222,122 @@ class _SettingsCardWidgetState extends State<SettingsCardWidget> {
                 }
               },
               label: 'UPDATE',
-              color: Colors.lightBlueAccent,
+              color: global.accentColor,
             ),
             RoundedBtnWidget(
               height: null,
               width: null,
               func: () {
                 showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('DELETE PROFILE'),
-                        content:
-                            const Text('Are you sure to delete your profile?'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              'CANCEL',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('LOG OUT'),
+                      content: const Text('Are you sure to log out?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'CANCEL',
+                            style: TextStyle(
+                              color: Colors.grey,
                             ),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              ApiControllers.instance
-                                  .deleteProfile()
-                                  .then((result) {
-                                if (result) {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          const HomePage(),
-                                    ),
-                                    (route) => false,
-                                  );
-                                } else {
-                                  global.printErrorBar(
-                                    context,
-                                    'Profile deletion failed, something went wrong!',
-                                  );
-                                }
-                              });
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              'DELETE',
-                              style: TextStyle(
-                                color: Colors.redAccent,
-                              ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            ApiControllers.instance.logout().then((result) {
+                              if (result) {
+                                widget.updateCurUser();
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const HomePage(),
+                                  ),
+                                  (route) => false,
+                                );
+                              } else {
+                                global.printErrorBar(
+                                  context,
+                                  'Logout failed, something went wrong!',
+                                );
+                              }
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'LOGOUT',
+                            style: TextStyle(
+                              color: Colors.redAccent,
                             ),
                           ),
-                        ],
-                      );
-                    });
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              label: 'LOG OUT',
+              color: Colors.redAccent,
+            ),
+            RoundedBtnWidget(
+              height: null,
+              width: null,
+              func: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('DELETE PROFILE'),
+                      content:
+                          const Text('Are you sure to delete your profile?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'CANCEL',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            ApiControllers.instance
+                                .deleteProfile()
+                                .then((result) {
+                              if (result) {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const HomePage(),
+                                  ),
+                                  (route) => false,
+                                );
+                              } else {
+                                global.printErrorBar(
+                                  context,
+                                  'Profile deletion failed, something went wrong!',
+                                );
+                              }
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'DELETE',
+                            style: TextStyle(
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
               label: 'DELETE PROFILE',
               color: Colors.redAccent,

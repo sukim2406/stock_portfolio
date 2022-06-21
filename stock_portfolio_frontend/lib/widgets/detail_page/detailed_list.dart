@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../controllers/global_controllers.dart' as global;
 
-import '../card.dart';
-import 'detailed_account_tile.dart';
+import '../../widgets/progress_circle.dart';
+import '../../widgets/card.dart';
+import '../../widgets/detail_page/detailed_account_tile.dart';
 
 class DetailedListWidget extends StatefulWidget {
   final VoidCallback updateAccounts;
@@ -87,9 +88,7 @@ class _DetailedListWidgetState extends State<DetailedListWidget> {
             )
           : SizedBox(
               height: global.getHeight(context) * .63,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const ProgressCircleWidget(),
             ),
     );
   }

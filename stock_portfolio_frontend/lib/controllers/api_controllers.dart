@@ -531,7 +531,7 @@ class ApiControllers extends GetxController {
     return false;
   }
 
-  addActivity(account, activity, content, price, qty) async {
+  addActivity(account, activity, content, price, qty, dateTime) async {
     String token = await SFControllers.instance.getToken();
     String curUser = await SFControllers.instance.getCurUser();
     String accountSlug = '$curUser-${account.toLowerCase()}';
@@ -542,7 +542,7 @@ class ApiControllers extends GetxController {
       'activity': activity,
       'content': content,
       'price': price,
-      'date': DateTime.now().toString(),
+      'date': dateTime.toString(),
       'qty': (qty != null) ? qty : '',
     };
 

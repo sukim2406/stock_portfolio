@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../controllers/global_controllers.dart' as global;
 
+import '../../widgets/progress_circle.dart';
+
 class DetailedSummeryTotalWidget extends StatefulWidget {
   final List accounts;
   const DetailedSummeryTotalWidget({
@@ -20,8 +22,10 @@ class _DetailedSummeryTotalWidgetState
     double cost = 0;
     if (widget.accounts.isNotEmpty) {
       for (Map account in widget.accounts) {
-        for (Map ticker in account['positions']) {
-          cost += double.parse(ticker['cost_basis']);
+        if (account['positions'] != null) {
+          for (Map ticker in account['positions']) {
+            cost += double.parse(ticker['cost_basis']);
+          }
         }
       }
     }
@@ -30,9 +34,13 @@ class _DetailedSummeryTotalWidgetState
 
   double getCurrentValue() {
     double value = 0;
-    for (Map account in widget.accounts) {
-      for (Map ticker in account['positions']) {
-        value += double.parse(ticker['market_value']);
+    if (widget.accounts.isNotEmpty) {
+      for (Map account in widget.accounts) {
+        if (account['positions'] != null) {
+          for (Map ticker in account['positions']) {
+            value += double.parse(ticker['market_value']);
+          }
+        }
       }
     }
     return value;
@@ -58,8 +66,10 @@ class _DetailedSummeryTotalWidgetState
 
   double getCash() {
     double cash = 0;
-    for (Map account in widget.accounts) {
-      cash += double.parse(account['cash']);
+    if (widget.accounts.isNotEmpty) {
+      for (Map account in widget.accounts) {
+        cash += double.parse(account['cash']);
+      }
     }
     return cash;
   }
@@ -199,9 +209,7 @@ class _DetailedSummeryTotalWidgetState
                 ),
               ],
             )
-          : const Center(
-              child: CircularProgressIndicator(),
-            ),
+          : const ProgressCircleWidget(),
     );
   }
 }

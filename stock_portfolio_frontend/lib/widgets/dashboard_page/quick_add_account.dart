@@ -55,6 +55,7 @@ class QuickAddAccountWidget extends StatelessWidget {
                           titleController.text,
                           cashController.text,
                           null,
+                          DateTime.now(),
                         )
                             .then(
                           (result) {

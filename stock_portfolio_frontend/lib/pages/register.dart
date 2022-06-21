@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/global_controllers.dart' as global;
 import '../controllers/api_controllers.dart';
@@ -39,9 +40,29 @@ class _RegisterPageState extends State<RegisterPage> {
               Container(
                 height: global.getHeight(context),
                 width: global.getWidth(context) * .6,
-                color: Colors.red,
+                color: global.accentColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'DIAMOND HANDS',
+                      style: GoogleFonts.rubik(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40,
+                      ),
+                    ),
+                    Text(
+                      'STOCK PORTFOLIO',
+                      style: GoogleFonts.rubik(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
+              Container(
+                color: Colors.black,
                 height: global.getHeight(context),
                 width: global.getWidth(context) * .4,
                 child: Column(
@@ -54,18 +75,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       obsecure: false,
                       enabled: true,
                     ),
-                    SizedBox(
-                      height: global.getHeight(context) * .03,
-                    ),
                     TextInputWidget(
                       width: global.getWidth(context) * .3,
                       label: 'Password',
                       controller: passwordController,
                       obsecure: true,
                       enabled: true,
-                    ),
-                    SizedBox(
-                      height: global.getHeight(context) * .03,
                     ),
                     TextInputWidget(
                       width: global.getWidth(context) * .3,
@@ -74,18 +89,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       obsecure: true,
                       enabled: true,
                     ),
-                    SizedBox(
-                      height: global.getHeight(context) * .03,
-                    ),
                     TextInputWidget(
                       width: global.getWidth(context) * .3,
                       label: 'Username',
                       controller: usernameController,
                       obsecure: false,
                       enabled: true,
-                    ),
-                    SizedBox(
-                      height: global.getHeight(context) * .03,
                     ),
                     TextInputWidget(
                       width: global.getWidth(context) * .3,
@@ -94,9 +103,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       obsecure: false,
                       enabled: true,
                     ),
-                    SizedBox(
-                      height: global.getHeight(context) * .03,
-                    ),
                     TextInputWidget(
                       width: global.getWidth(context) * .3,
                       label: 'Alpaca Secret Key',
@@ -104,21 +110,26 @@ class _RegisterPageState extends State<RegisterPage> {
                       obsecure: false,
                       enabled: true,
                     ),
-                    SizedBox(
-                      width: global.getWidth(context) * .3,
-                      child: CheckboxListTile(
-                        title: const Text(
-                          'Paper Traing?',
-                          style: TextStyle(
-                            color: Colors.black54,
+                    Theme(
+                      data: ThemeData(unselectedWidgetColor: Colors.grey),
+                      child: SizedBox(
+                        width: global.getWidth(context) * .3,
+                        child: CheckboxListTile(
+                          activeColor: global.accentColor,
+                          checkColor: Colors.black,
+                          title: const Text(
+                            'Paper Traing?',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
+                          value: _paperTrade,
+                          onChanged: (value) {
+                            setState(() {
+                              _paperTrade = value!;
+                            });
+                          },
                         ),
-                        value: _paperTrade,
-                        onChanged: (value) {
-                          setState(() {
-                            _paperTrade = value!;
-                          });
-                        },
                       ),
                     ),
                     SizedBox(
@@ -175,7 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         }
                       },
                       label: 'REGISTER',
-                      color: Colors.lightBlueAccent,
+                      color: global.accentColor,
                     ),
                     SizedBox(
                       height: global.getHeight(context) * .06,
@@ -192,8 +203,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           children: [
                             TextSpan(
                               text: 'LOGIN',
-                              style: const TextStyle(
-                                color: Colors.lightBlueAccent,
+                              style: TextStyle(
+                                color: global.accentColor,
                                 fontWeight: FontWeight.bold,
                               ),
                               recognizer: TapGestureRecognizer()

@@ -34,6 +34,7 @@ class _DetailedSummeryUpdateTickerState
   late TextEditingController tickerController;
   late TextEditingController priceController;
   late TextEditingController qtyController;
+  late TextEditingController dateController;
   late DateTime dateTime;
   late String hours;
   late String minutes;
@@ -54,13 +55,16 @@ class _DetailedSummeryUpdateTickerState
     tickerController = TextEditingController();
     priceController = TextEditingController();
     qtyController = TextEditingController();
+    dateController = TextEditingController();
     dateTime = DateTime.now();
     hours = dateTime.hour.toString().padLeft(2, '0');
     minutes = dateTime.minute.toString().padLeft(2, '0');
     seconds = dateTime.second.toString().padLeft(2, '0');
+    dateController.text = '${dateTime.year}/${dateTime.month}/${dateTime.day}';
   }
 
   Future pickDateTime() async {
+    DateTime curTime = DateTime.now();
     DateTime? date = await pickDate();
     if (date == null) return;
 
@@ -73,10 +77,13 @@ class _DetailedSummeryUpdateTickerState
       date.day,
       time.hour,
       time.minute,
+      curTime.second,
     );
 
     setState(() {
       this.dateTime = dateTime;
+      dateController.text =
+          '${dateTime.year}/${dateTime.month}/${dateTime.day}';
     });
   }
 
@@ -88,11 +95,21 @@ class _DetailedSummeryUpdateTickerState
       );
 
   Future<TimeOfDay?> pickTime() => showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(
-        hour: dateTime.hour,
-        minute: dateTime.minute,
-      ));
+        context: context,
+        initialTime: TimeOfDay(
+          hour: dateTime.hour,
+          minute: dateTime.minute,
+        ),
+      );
+  // Future<TimeOfDay?> pickTime() {
+  //   return showTimePicker(
+  //     context: context,
+  //     initialTime: TimeOfDay(
+  //       hour: dateTime.hour,
+  //       minute: dateTime.minute,
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -207,17 +224,29 @@ class _DetailedSummeryUpdateTickerState
                       obsecure: false,
                       enabled: true,
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
+                    GestureDetector(
+                      onTap: () {
                         pickDateTime();
                       },
-                      child: SizedBox(
+                      child: TextInputWidget(
                         width: global.getDetailedSummeryWidth(context) * .15,
-                        child: Text(
-                          '${dateTime.year}/${dateTime.month}/${dateTime.day} $hours:$minutes:$seconds',
-                        ),
+                        label: 'Date',
+                        controller: dateController,
+                        obsecure: false,
+                        enabled: false,
                       ),
                     ),
+                    // ElevatedButton(
+                    //   onPressed: () async {
+                    //     pickDateTime();
+                    //   },
+                    //   child: SizedBox(
+                    //     width: global.getDetailedSummeryWidth(context) * .15,
+                    //     child: Text(
+                    //       '${dateTime.year}/${dateTime.month}/${dateTime.day} $hours:$minutes:$seconds',
+                    //     ),
+                    //   ),
+                    // ),
                     RoundedBtnWidget(
                       height: null,
                       width: null,
@@ -264,11 +293,13 @@ class _DetailedSummeryUpdateTickerState
                                 if (result) {
                                   ApiControllers.instance
                                       .addActivity(
-                                          selectedAccount,
-                                          'BUY',
-                                          tickerController.text,
-                                          priceController.text,
-                                          qtyController.text)
+                                    selectedAccount,
+                                    'BUY',
+                                    tickerController.text,
+                                    priceController.text,
+                                    qtyController.text,
+                                    dateTime,
+                                  )
                                       .then(
                                     (result) {
                                       if (result) {
@@ -333,11 +364,13 @@ class _DetailedSummeryUpdateTickerState
                                 if (result) {
                                   ApiControllers.instance
                                       .addActivity(
-                                          selectedAccount,
-                                          'SELL',
-                                          tickerController.text,
-                                          priceController.text,
-                                          qtyController.text)
+                                    selectedAccount,
+                                    'SELL',
+                                    tickerController.text,
+                                    priceController.text,
+                                    qtyController.text,
+                                    dateTime,
+                                  )
                                       .then(
                                     (result) {
                                       if (result) {
@@ -368,11 +401,13 @@ class _DetailedSummeryUpdateTickerState
                                   if (result) {
                                     ApiControllers.instance
                                         .addActivity(
-                                            selectedAccount,
-                                            'SELL',
-                                            tickerController.text,
-                                            priceController.text,
-                                            qtyController.text)
+                                      selectedAccount,
+                                      'SELL',
+                                      tickerController.text,
+                                      priceController.text,
+                                      qtyController.text,
+                                      dateTime,
+                                    )
                                         .then(
                                       (result) {
                                         if (result) {
@@ -408,6 +443,7 @@ class _DetailedSummeryUpdateTickerState
                                 selectedAccount,
                                 priceController.text,
                                 '',
+                                dateTime,
                               )
                                   .then(
                                 (result) {
@@ -441,6 +477,7 @@ class _DetailedSummeryUpdateTickerState
                                 selectedAccount,
                                 priceController.text,
                                 '',
+                                dateTime,
                               )
                                   .then(
                                 (result) {

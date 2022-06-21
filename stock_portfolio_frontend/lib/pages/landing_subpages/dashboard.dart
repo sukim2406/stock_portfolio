@@ -94,11 +94,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 }
                 account['positions'] = positions;
 
-                setState(
-                  () {
-                    _accounts.add(account);
-                  },
-                );
+                if (mounted) {
+                  setState(
+                    () {
+                      _accounts.add(account);
+                    },
+                  );
+                }
               },
             );
           }

@@ -4,11 +4,11 @@ import '../controllers/global_controllers.dart' as global;
 
 import '../widgets/side_bar.dart';
 
-import '../pages/landing_subpages/logout.dart';
 import '../pages/landing_subpages/dashboard.dart';
 import '../pages/landing_subpages/detail.dart';
 import '../pages/landing_subpages/activities.dart';
 import '../pages/landing_subpages/settings.dart';
+import '../pages/landing_subpages/about.dart';
 
 class LandingPage extends StatefulWidget {
   final VoidCallback updateCurUser;
@@ -36,8 +36,10 @@ class _LandingPageState extends State<LandingPage> {
       const DashboardPage(),
       const DetailPage(),
       const ActivitiesPage(),
-      const SettingsPage(),
-      LogoutPage(updateCurUser: widget.updateCurUser),
+      SettingsPage(
+        updateCurUser: widget.updateCurUser,
+      ),
+      const AboutPage(),
     ];
     return Scaffold(
       body: Container(

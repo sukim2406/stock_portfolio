@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../controllers/global_controllers.dart' as global;
-import '../../controllers/api_controllers.dart';
 
 import '../../widgets/settings_page/settings_card.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  final VoidCallback updateCurUser;
+  const SettingsPage({
+    Key? key,
+    required this.updateCurUser,
+  }) : super(key: key);
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -20,7 +23,9 @@ class _SettingsPageState extends State<SettingsPage> {
       height: global.getHeight(context),
       width: global.getWidth(context) * .9,
       color: global.baseColor,
-      child: const SettingsCardWidget(),
+      child: SettingsCardWidget(
+        updateCurUser: widget.updateCurUser,
+      ),
     ));
   }
 }

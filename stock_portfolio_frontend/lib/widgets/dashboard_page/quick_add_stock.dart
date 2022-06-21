@@ -139,6 +139,7 @@ class _QuickAddStockWidgetState extends State<QuickAddStockWidget> {
                         tickerController.text,
                         priceController.text,
                         qtyController.text,
+                        DateTime.now(),
                       )
                           .then((result) {
                         if (result) {

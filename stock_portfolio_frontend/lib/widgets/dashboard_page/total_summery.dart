@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../controllers/global_controllers.dart' as global;
 
-import '../card.dart';
-import 'summery_tile.dart';
+import '../../widgets/card.dart';
+import '../../widgets/dashboard_page/summery_tile.dart';
+import '../../widgets/progress_circle.dart';
 
 class TotalSummeryWidget extends StatefulWidget {
   final List accounts;
@@ -16,7 +17,8 @@ class TotalSummeryWidget extends StatefulWidget {
   State<TotalSummeryWidget> createState() => _TotalSummeryWidgetState();
 }
 
-class _TotalSummeryWidgetState extends State<TotalSummeryWidget> {
+class _TotalSummeryWidgetState extends State<TotalSummeryWidget>
+    with TickerProviderStateMixin {
   bool checkData() {
     Map data = widget.accounts[0];
     if (data['positions'] != null) {
@@ -205,9 +207,7 @@ class _TotalSummeryWidgetState extends State<TotalSummeryWidget> {
             )
           : SizedBox(
               height: global.getHeight(context) * .9,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const ProgressCircleWidget(),
             ),
     );
   }

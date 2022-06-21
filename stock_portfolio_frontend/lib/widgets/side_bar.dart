@@ -83,9 +83,9 @@ class SideBarWidget extends StatelessWidget {
               updatePage(4);
             },
             child: SideBarEntryWidget(
-              icon: const Icon(Icons.power_off_outlined),
-              selectedIcon: const Icon(Icons.power_off),
-              text: 'logout',
+              icon: const Icon(Icons.help_center_outlined),
+              selectedIcon: const Icon(Icons.help_center),
+              text: 'about',
               selected: (index == 4) ? true : false,
             ),
           ),

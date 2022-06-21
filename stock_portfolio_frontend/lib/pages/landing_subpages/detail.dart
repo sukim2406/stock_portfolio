@@ -102,12 +102,13 @@ class _DetailPageState extends State<DetailPage> {
                   positions.add(sortedMap);
                 }
                 account['positions'] = positions;
-
-                setState(
-                  () {
-                    _accounts.add(account);
-                  },
-                );
+                if (mounted) {
+                  setState(
+                    () {
+                      _accounts.add(account);
+                    },
+                  );
+                }
               },
             );
           }
