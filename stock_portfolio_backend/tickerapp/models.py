@@ -14,7 +14,7 @@ class Ticker(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ticker', blank=True)
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, related_name='ticker', blank=True)
     slug = models.SlugField(blank=True, unique=True)
-    username = models.CharField(max_length=30)
+    username = models.CharField(max_length=30, blank=True)
     currentPrice = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
     
     def __str__(self):
@@ -25,7 +25,7 @@ class Ticker(models.Model):
 
 def pre_save_ticker_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
-        instance.user = Account.objects.get(username=instance.username)
+        instance.username = instance.user.username
         instance.portfolio = Portfolio.objects.get(slug=instance.portfolioSlug)
         instance.slug = slugify(instance.ticker + "-" + instance.portfolio.slug)
 
