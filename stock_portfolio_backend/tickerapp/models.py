@@ -14,7 +14,7 @@ class Ticker(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ticker', blank=True)
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, related_name='ticker', blank=True)
     slug = models.SlugField(blank=True, unique=True)
-    username = models.CharField(max_length=30, blank=True)
+    username = models.CharField(max_length=100, blank=True)
     currentPrice = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
     
     def __str__(self):
