@@ -30,8 +30,12 @@ class SFControllers extends GetxController {
   }
 
   Future setCurUser(curUser) async {
-    var sf = await SharedPreferences.getInstance();
-    sf.setString('curUser', curUser);
+    await SharedPreferences.getInstance().then(
+      (sf) {
+        sf.setString('curUser', curUser);
+      },
+    );
+    // sf.setString('curUser', curUser);
   }
 
   Future clearToken() async {

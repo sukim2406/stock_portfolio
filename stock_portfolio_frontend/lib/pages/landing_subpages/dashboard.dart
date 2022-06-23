@@ -58,8 +58,8 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
-  void initCustomAccounts() {
-    ApiControllers.instance.getAccountLists().then(
+  void initCustomAccounts() async {
+    await ApiControllers.instance.getAccountLists().then(
       (result) {
         if (result.length != 0) {
           for (Map account in result) {

@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 class UrlControllers extends GetxController {
   static UrlControllers instance = Get.find();
 
+  String devUrl = 'http://localhost:8000';
+  String deployUrl = 'http://158.247.214.223';
+
   String baseUrl = 'http://localhost:8000';
 
   getRegisterUrl() {

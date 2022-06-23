@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from tickerapp.api.serializers import TickerSerializer
+from tickerapp.api.serializers import TickerSerializer, TickerCreateSerializer
 from rest_framework.generics import ListAPIView
 from rest_framework.authentication import TokenAuthentication
 from tickerapp.models import Ticker
@@ -16,11 +16,12 @@ import requests, json
 def create_ticker_view(request):
     try:
         account = request.user
+        ticker = Ticker(user=account)
     except Account.DoesNotExist:
         return Response(status = status.HTTP_404_NOT_FOUND)
 
     if request.method == "POST":
-        serializer = TickerSerializer(data=request.data)
+        serializer = TickerCreateSerializer(ticker, data=request.data)
 
         if serializer.is_valid():
             headers = {'APCA-API-KEY-ID': account.alpaca_api_key, 'APCA-API-SECRET-KEY': account.alpaca_secret_key}
@@ -29,11 +30,14 @@ def create_ticker_view(request):
             data = json.loads(r.content)
             if(r.status_code == 200):
                 serializer.validated_data['currentPrice'] = data['latestTrade']['p']
+                print(serializer.validated_data)
                 try:
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
-                except:
-                    return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                except Exception as e:
+                    print('hihi')
+                    print(e)
+                    return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

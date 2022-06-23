@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../controllers/global_controllers.dart' as global;
+import '../../controllers/shared_preferences_controllers.dart';
 
 import '../../widgets/settings_page/settings_card.dart';
 

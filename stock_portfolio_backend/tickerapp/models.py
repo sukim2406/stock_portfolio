@@ -11,7 +11,7 @@ class Ticker(models.Model):
     averagePrice = models.DecimalField(decimal_places=2, max_digits=10)
     portfolioSlug = models.CharField(max_length=50, blank=True)
     ticker = models.CharField(max_length=4, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ticker', blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ticker')
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, related_name='ticker', blank=True)
     slug = models.SlugField(blank=True, unique=True)
     username = models.CharField(max_length=100, blank=True)

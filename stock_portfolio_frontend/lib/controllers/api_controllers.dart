@@ -25,13 +25,16 @@ class ApiControllers extends GetxController {
     );
 
     var jsonResponse = json.decode(response.body);
+    print(jsonResponse.toString());
     if (response.statusCode == 200) {
-      SFControllers.instance.setToken(
+      await SFControllers.instance.setToken(
         jsonResponse['token'],
       );
-      SFControllers.instance.setCurUser(
+      await SFControllers.instance.setCurUser(
         jsonResponse['user'],
       );
+      var sf = await SFControllers.instance.getCurUser();
+      print(sf);
       return true;
     } else {
       return false;
@@ -40,6 +43,7 @@ class ApiControllers extends GetxController {
 
   logout() async {
     String token = await SFControllers.instance.getToken();
+    print(token);
     var response = await http.post(
       Uri.parse(
         UrlControllers.instance.getLogoutUrl(),
@@ -51,8 +55,10 @@ class ApiControllers extends GetxController {
     if (response.statusCode == 200) {
       SFControllers.instance.clearToken();
       return true;
+    } else {
+      print(response.statusCode);
+      return false;
     }
-    return false;
   }
 
   register(
@@ -139,20 +145,23 @@ class ApiControllers extends GetxController {
   }
 
   getAccountLists() async {
-    String token = await SFControllers.instance.getToken();
-    String curUser = await SFControllers.instance.getCurUser();
+    var result;
+    await SFControllers.instance.getToken().then((token) async {
+      await SFControllers.instance.getCurUser().then((curUser) async {
+        var response = await http.get(
+          Uri.parse(
+            UrlControllers.instance.getAccountListUrl(curUser),
+          ),
+          headers: {
+            HttpHeaders.authorizationHeader: 'Token $token',
+          },
+        );
+        var jsonResponse = json.decode(response.body);
+        result = jsonResponse;
+      });
+    });
 
-    var response = await http.get(
-      Uri.parse(
-        UrlControllers.instance.getAccountListUrl(curUser),
-      ),
-      headers: {
-        HttpHeaders.authorizationHeader: 'Token $token',
-      },
-    );
-
-    var jsonResponse = json.decode(response.body);
-    return jsonResponse;
+    return result;
   }
 
   addTicker(username, portfolio, ticker, qty, averagePrice) async {
@@ -300,6 +309,9 @@ class ApiControllers extends GetxController {
         },
         body: data,
       );
+      print('check here');
+      print(token);
+      print(response.statusCode);
       if (response.statusCode == 201) {
         Map data = {
           'averagePrice': price,

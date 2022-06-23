@@ -155,7 +155,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               password2Controller.text,
                               apiKeyController.text,
                               secretKeyController.text,
-                              _paperTrade,
+                              _paperTrade.toString(),
                             )
                                 .then(
                               (result) {
