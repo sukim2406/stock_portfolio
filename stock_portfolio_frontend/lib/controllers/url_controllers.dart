@@ -6,7 +6,7 @@ class UrlControllers extends GetxController {
   String devUrl = 'http://localhost:8000';
   String deployUrl = 'http://158.247.214.223';
 
-  String baseUrl = 'http://localhost:8000';
+  String baseUrl = 'http://158.247.214.223';
 
   getRegisterUrl() {
     String registerUrl = '$baseUrl/api/account/register/';

@@ -25,7 +25,6 @@ class ApiControllers extends GetxController {
     );
 
     var jsonResponse = json.decode(response.body);
-    print(jsonResponse.toString());
     if (response.statusCode == 200) {
       await SFControllers.instance.setToken(
         jsonResponse['token'],
@@ -33,8 +32,7 @@ class ApiControllers extends GetxController {
       await SFControllers.instance.setCurUser(
         jsonResponse['user'],
       );
-      var sf = await SFControllers.instance.getCurUser();
-      print(sf);
+
       return true;
     } else {
       return false;
@@ -43,7 +41,6 @@ class ApiControllers extends GetxController {
 
   logout() async {
     String token = await SFControllers.instance.getToken();
-    print(token);
     var response = await http.post(
       Uri.parse(
         UrlControllers.instance.getLogoutUrl(),
@@ -56,7 +53,6 @@ class ApiControllers extends GetxController {
       SFControllers.instance.clearToken();
       return true;
     } else {
-      print(response.statusCode);
       return false;
     }
   }
@@ -145,7 +141,7 @@ class ApiControllers extends GetxController {
   }
 
   getAccountLists() async {
-    var result;
+    List? result;
     await SFControllers.instance.getToken().then((token) async {
       await SFControllers.instance.getCurUser().then((curUser) async {
         var response = await http.get(
@@ -309,9 +305,6 @@ class ApiControllers extends GetxController {
         },
         body: data,
       );
-      print('check here');
-      print(token);
-      print(response.statusCode);
       if (response.statusCode == 201) {
         Map data = {
           'averagePrice': price,
@@ -614,7 +607,6 @@ class ApiControllers extends GetxController {
       },
       body: data,
     );
-    var jsonResponse = json.decode(response.body);
     if (response.statusCode == 200) {
       return true;
     }

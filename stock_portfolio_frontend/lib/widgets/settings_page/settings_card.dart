@@ -6,7 +6,6 @@ import '../../widgets/rounded_btn.dart';
 
 import '../../controllers/api_controllers.dart';
 import '../../controllers/global_controllers.dart' as global;
-import '../../controllers/shared_preferences_controllers.dart';
 
 import '../../pages/home.dart';
 
@@ -341,6 +340,15 @@ class _SettingsCardWidgetState extends State<SettingsCardWidget> {
                 );
               },
               label: 'DELETE PROFILE',
+              color: Colors.redAccent,
+            ),
+            RoundedBtnWidget(
+              height: null,
+              width: null,
+              func: () {
+                widget.updateCurUser();
+              },
+              label: 'emergency',
               color: Colors.redAccent,
             )
           ],

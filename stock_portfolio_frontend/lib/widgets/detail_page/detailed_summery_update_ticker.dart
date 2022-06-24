@@ -63,6 +63,17 @@ class _DetailedSummeryUpdateTickerState
     dateController.text = '${dateTime.year}/${dateTime.month}/${dateTime.day}';
   }
 
+  void updateDateTime() {
+    setState(() {
+      dateTime = DateTime.now();
+      hours = dateTime.hour.toString().padLeft(2, '0');
+      minutes = dateTime.minute.toString().padLeft(2, '0');
+      seconds = dateTime.second.toString().padLeft(2, '0');
+      dateController.text =
+          '${dateTime.year}/${dateTime.month}/${dateTime.day}';
+    });
+  }
+
   Future pickDateTime() async {
     DateTime curTime = DateTime.now();
     DateTime? date = await pickDate();
@@ -303,6 +314,7 @@ class _DetailedSummeryUpdateTickerState
                                       .then(
                                     (result) {
                                       if (result) {
+                                        updateDateTime();
                                         tickerController.clear();
                                         qtyController.clear();
                                         priceController.clear();
@@ -374,6 +386,7 @@ class _DetailedSummeryUpdateTickerState
                                       .then(
                                     (result) {
                                       if (result) {
+                                        updateDateTime();
                                         tickerController.clear();
                                         qtyController.clear();
                                         priceController.clear();
@@ -411,6 +424,7 @@ class _DetailedSummeryUpdateTickerState
                                         .then(
                                       (result) {
                                         if (result) {
+                                          updateDateTime();
                                           tickerController.clear();
                                           qtyController.clear();
                                           priceController.clear();
@@ -448,6 +462,7 @@ class _DetailedSummeryUpdateTickerState
                                   .then(
                                 (result) {
                                   if (result) {
+                                    updateDateTime();
                                     tickerController.clear();
                                     qtyController.clear();
                                     priceController.clear();
@@ -482,6 +497,7 @@ class _DetailedSummeryUpdateTickerState
                                   .then(
                                 (result) {
                                   if (result) {
+                                    updateDateTime();
                                     tickerController.clear();
                                     qtyController.clear();
                                     priceController.clear();
