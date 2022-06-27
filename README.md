@@ -1,6 +1,7 @@
 # DIAMOND HANDS : Stock Portfolio
 
 ## Demo | 시연영상
+![demogif](https://user-images.githubusercontent.com/35786537/175854950-592b8ca8-a51f-4da9-9f2e-c552c3a173d0.gif)
 
 ## Objectives | 개발 목표
   to create stock portfolio application that can keep track of all accounts in a single program
